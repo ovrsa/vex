@@ -1,0 +1,46 @@
+# ワークフローの名前
+name: CI 
+
+# このワークフローがトリガーされるイベント
+on: 
+  push:
+    # mainブランチへのpushでトリガー
+    branches: [ main ] 
+  pull_request:
+    # mainブランチへのプルリクエストでトリガー
+    branches: [ main ] 
+
+# 実行するジョブの定義
+jobs: 
+  # ジョブの名前
+  build: 
+    # ジョブを実行するランナーの種類
+    runs-on: ubuntu-latest 
+
+    # ジョブ内で実行するステップ
+    steps: 
+    # リポジトリのコードをチェックアウト
+    - uses: actions/checkout@v2 
+
+    # ステップの名前
+    - name: Set up Node.js
+      # Node.jsのセットアップ
+      uses: actions/setup-node@v1 
+      with:
+        # 使用するNode.jsのバージョン
+        node-version: '14' 
+
+    # 依存関係のインストール
+    - name: Install dependencies 
+      # npmを使って依存関係をインストール
+      run: npm install 
+
+    # テストの実行
+    - name: Run tests 
+      # npmを使ってテストを実行
+      run: npm test 
+
+    # ビルドの実行
+    - name: Build 
+      # npmを使ってビルドを実行
+      run: npm run build 
