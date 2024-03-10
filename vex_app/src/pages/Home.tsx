@@ -1,5 +1,19 @@
+import React, { useEffect, useState } from 'react';
+import { scrapeEvents } from '../services/scraper';
 
 const Home = () => {
+    const [events, setEvents] = useState([]);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            const url = 'https://www.walkerplus.com/top/ar0300/';
+            const scrapedEvents = await scrapeEvents(url);
+            setEvents(scrapedEvents);
+        };
+
+        fetchData();
+    }, []);
+
     return (
         <div className="bg-gray-100 min-h-screen">
             <nav className="bg-white shadow">
@@ -22,6 +36,13 @@ const Home = () => {
                 <p className="text-gray-700 font-medium">地図</p>
                 <div className="mt-3 text-sm text-gray-500">地図を表示</div>
             </div>
+
+            {events.map((event, index) => (
+                <div key={index}>
+                    <p>{event.eventName}</p>
+                    <p>{event.address}</p>
+                </div>
+            ))}
         </div >
     );
 };
