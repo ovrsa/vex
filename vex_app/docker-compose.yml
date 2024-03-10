@@ -1,3 +1,4 @@
+# node
 version: "3.8"
 services:
   frontend:
@@ -9,3 +10,13 @@ services:
       - /app/node_modules
     environment:
       - NODE_ENV=development
+  backend:
+    build: .
+    ports:
+      - "3001:3001"
+    volumes:
+      - .:/app
+      - /app/node_modules
+    environment:
+      - NODE_ENV=development
+    command: ["node", "server.js"]
