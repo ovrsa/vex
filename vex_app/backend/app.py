@@ -1,40 +1,64 @@
 from flask import Flask, request
+# HTMLやXMLファイルから情報を抽出するためのライブラリ
 from bs4 import BeautifulSoup
+# URLを開いてHTMLを取得するためのライブラリ
 import urllib.request
+import json
 import logging
 
 logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
 
+# Flaskのインスタンスを作成
 app = Flask(__name__)
 
 
-# scrapeしたいURLを受け取って、タイトルを返すエンドポイント
+# エンドポイントのURLを指定してイベント情報を取得するエンドポイントを作成
 @app.route('/scrape')
 def scrape():
-    # スクレイピングしたいURL
+    # URLを取得
     url = request.args.get('url')
-    # URLが不正の場合はエラーを返す
     if not url:
         return 'URL query parameter is missing', 400
 
-    # URLからHTMLを取得
+    # URLを開いてHTMLを取得
     with urllib.request.urlopen(url) as response:
+        # HTMLの情報を取得
         html = response.read()
 
-    # BeautifulSoupオブジェクトを作成
+    # BeautifulSoupを使ってHTMLをパース
     soup = BeautifulSoup(html, 'html.parser')
+    # スクリプトタグ内のJSONデータを取得
+    script = soup.find('script', type='application/ld+json')
+    if not script:
+        return 'Event data not found', 404
+    # JSONデータをパース
+    data = json.loads(script.string)
 
-    # soupの内容をコンソールに出力
-    logger.debug(soup.prettify())
+    # スクリプトのタグから必要な情報を抽出
+    event_name = data.get('name')
+    start_date = data.get('startDate')
+    end_date = data.get('endDate')
+    location_name = data['location'].get('name')
+    address = data['location']['address'].get('streetAddress')
 
-    # タイトルタグのテキストを取得
-    title = soup.title.string
-    body = soup.body.string
+    # 情報をHTML形式で出力
+    output = f"""
+    <html>
+        <head><title>Event Information</title></head>
+        <body>
+            <h1>{event_name}</h1>
+            <p>Start Date: {start_date}</p>
+            <p>End Date: {end_date}</p>
+            <p>Location Name: {location_name}</p>
+            <p>Address: {address}</p>
+        </body>
+    </html>
+    """
+    return output
 
-    return f'Title: {title} Body: {body}'
 
-
-# デバッグモードでアプリケーションを起動
+# TODO：本番環境ではデバッグモードを無効にする
+# デバッグモードでFlaskアプリケーションを起動
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0')
