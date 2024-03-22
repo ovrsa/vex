@@ -1,33 +1,49 @@
+import { Loader } from '@googlemaps/js-api-loader';
+import { useEffect, useRef, useState } from 'react';
 
+const containerStyle = {
+  width: '800px',
+  height: '800px'
+};
+
+const center = {
+  lat: 35.6895,
+  lng: 139.6720
+};
 
 const Home = () => {
+  // useStateでmapの状態を保持
+  const [map, setMap] = useState<google.maps.Map>();
+  const mapRef = useRef<HTMLDivElement>(null);
 
-    return (
-        <div className="bg-gray-100 min-h-screen">
-            <nav className="bg-white shadow">
-                <div className="container mx-auto px-6 py-3">
-                    <div className="flex justif
-                    y-between items-center">
-                        <div className="text-lg font-semibold">Vex</div>
-                    </div>
-                </div>
-            </nav>
+  // コンポーネントがマウントされたあとにGooglemapを非同期にロード
+  useEffect(() => {
+    const loader = new Loader({
+      apiKey: "AIzaSyCgxkSFftgiodJEFrv-ca9CTUAxC0DYu1Y",
+      version: "weekly",
+    });
 
-            {/* axiosでスクレイピングした情報を出力 */}
-            <div className="container mx-auto my-10 px-6">
-                <p className="text-gray-700 font-medium">スクレイピング</p>
-                <p className="mt-3 text-sm text-gray-500">イベント名</p>
-                <p className="mt-3 text-sm text-gray-500">住所</p>
-            </div>
+    // Loaderインスタンスを作成し、APIを非同期にロード
+    loader.load().then(() => {
+      if (mapRef.current) {
+        const map = new google.maps.Map(mapRef.current, {
+          center,
+          zoom: 10,
+        });
+        // APIがロードされた後、mapRefで参照されるdiv要素に新たな地図を作成
+        // setMapを使用してmapの状態を更新
+        setMap(map);
+      }
+    });
+  }, []);
 
-            {/* Google Map APIを使って地図を表示 */}
-            <div className="container mx-auto my-10 px-6">
-                <p className="text-gray-700 font-medium">地図</p>
-                <div className="mt-3 text-sm text-gray-500">地図を表示</div>
-            </div>
-
-
-        </div >
-    );
+  return (
+    <div>
+        {/* レンダリング */}
+      <div ref={mapRef} style={containerStyle} />
+      {/* 他のコンテンツ */}
+    </div>
+  );
 };
+
 export default Home;
