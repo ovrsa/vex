@@ -19,7 +19,7 @@ const Home = () => {
   // コンポーネントがマウントされたあとにGooglemapを非同期にロード
   useEffect(() => {
     const loader = new Loader({
-      apiKey: "AIzaSyCgxkSFftgiodJEFrv-ca9CTUAxC0DYu1Y",
+      apiKey: "",
       version: "weekly",
     });
 
