@@ -4,6 +4,8 @@ FROM node:18
 WORKDIR /app
 # package.jsonとpackage-lock.jsonをコンテナのルートディレクトリにコピー
 COPY package*.json ./
+# .env
+COPY .env ./
 # アプリケーションの依存関係をインストール
 RUN npm install
 # アプリケーションのソースコードをコピー
