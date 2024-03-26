@@ -1,4 +1,5 @@
 import { Loader } from '@googlemaps/js-api-loader';
+import axios from 'axios';
 import { useEffect, useRef, useState } from 'react';
 
 const containerStyle = {
@@ -13,11 +14,33 @@ const tokyoTower = {
 };
 
 const Home = () => {
+  // リクエストに載せるURL
+  const [url, setUrl] = useState('');
+  // ユーザーがクリックした際に発火
+  const handleSubmit = async(e:React.FormEvent) => {
+    //フォームのデフォルト送信を防ぐ
+    e.preventDefault(); 
+    try{
+      // 指定したURL宛にHTTP POSTを送信
+      // ボディにはスクレイプ用のURLを含める
+      // TODO: URLの渡し方について、地名と日付で動的に変えられるように調整
+      // awaitで非同期リクエストが終わるまで待機
+      // 終了後、response.data(JSON)で値を取得
+      const response = await axios.post('http://localhost:5001/scrape', JSON.stringify({ url: url }), {
+        headers: {
+          // JSON形式であることを指定
+          'Content-Type': 'application/json',
+        },
+      });
+      console.log(response.data);
+    } catch (error) {
+      console.error('Error sending data to the backend', error);
+    }
+  };
+
   // useStateでGoogleMapに表示した内容を保持
   const [map, setMap] = useState<google.maps.Map>();
-  // useRefHTMLDivElement
   const mapRef = useRef<HTMLDivElement>(null);
-
   // useEffectでコンポーネントがマウントされた際に処理を実行
   // googlemaps/js-api-loaderのLoaderを使用
   useEffect(() => {
@@ -81,6 +104,15 @@ const Home = () => {
 
   return (
     <div>
+      <form onSubmit={handleSubmit}>
+        <input
+          type="text"
+          value={url}
+          onChange={(e) => setUrl(e.target.value)}
+          placeholder="Enter URL to scrape"
+        />
+        <button type="submit">Submit</button>
+      </form>
       <div ref={mapRef} style={containerStyle} />
     </div>
   );

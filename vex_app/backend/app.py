@@ -1,15 +1,17 @@
-from flask import Flask, request
-from bs4 import BeautifulSoup
-import urllib.request
 import json
 import logging
+import urllib.request
 import uuid
+
+from bs4 import BeautifulSoup
+from flask import Flask, jsonify, request
+from flask_cors import CORS
 
 logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
 
 app = Flask(__name__)
-
+CORS(app)
 
 def fetch_html(url):
     """
@@ -143,18 +145,22 @@ def parse_price_details(html, event):
         logger.debug('Price table not found')
 
 
-@app.route('/scrape')
+@app.route('/scrape', methods=['POST'])
 def scrape():
+    logger.debug(f'Received request: {request.args}')
     """
     クライアントからのリクエストに基づいてウェブスクレイピングを実行し、
     抽出したイベント情報をJSON形式で返す
     """
-    url = request.args.get('url')
+    data = request.json
+    url = data.get('url')
     if not url:
-        return 'URL query parameter is missing', 400
+        return jsonify({'error': 'URL is missing'}), 400
+    
     html = fetch_html(url)
     if html is None:
-        return 'Error fetching the URL', 500
+        return jsonify({'error': ' fetching the URL'}), 500
+    
     events_dict = extract_event_info(html)
     fetch_event_details(events_dict)
     logger.debug(f'Events: {json.dumps(events_dict, ensure_ascii=False)}')
