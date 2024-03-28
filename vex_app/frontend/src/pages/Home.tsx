@@ -1,6 +1,8 @@
+import { ComboboxForm } from '@/components/comboboxFrom';
+import { Calendar } from "@/components/ui/calendar";
 import { Loader } from '@googlemaps/js-api-loader';
 import axios from 'axios';
-import { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 const containerStyle = {
   width: '800px',
@@ -14,6 +16,8 @@ const tokyoTower = {
 };
 
 const Home = () => {
+  const [date, setDate] = React.useState<Date | undefined>(new Date())
+
   // リクエストに載せるURL
   const [url, setUrl] = useState('');
   // ユーザーがクリックした際に発火
@@ -104,6 +108,13 @@ const Home = () => {
 
   return (
     <div>
+    <ComboboxForm />
+    <Calendar
+    mode="single"
+    selected={date}
+    onSelect={setDate}
+    className="rounded-md border"
+    />
       <form onSubmit={handleSubmit}>
         <input
           type="text"
