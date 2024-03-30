@@ -2,6 +2,7 @@
 // import { Loader } from '@googlemaps/js-api-loader';
 // import axios from 'axios';
 // import React, { useEffect, useRef, useState } from 'react';
+import { ComboboxPopover } from "@/components/Combobox";
 import { DatePickerForm } from "@/components/DatePickerForm";
 
 // const containerStyle = {
@@ -112,6 +113,7 @@ const Home = () => {
       <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '50vh' }}>
       <DatePickerForm />
       </div>
+      <ComboboxPopover />
       {/* <form onSubmit={handleSubmit}>
         <input
           type="text"

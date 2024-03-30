@@ -25,6 +25,7 @@ import {
 } from "@/components/ui/popover"
 import { toast } from "@/components/ui/use-toast"
 import { cn } from "@/lib/utils"
+import { ComboboxPopover } from "./Combobox"
  
 
 const FormSchema = z.object({
@@ -33,6 +34,9 @@ const FormSchema = z.object({
   }),
   region: z.string({
     required_error: "A region is required.",
+  }),
+  status: z.string({
+    required_error: "A status is required.",
   }),
 })
 
@@ -71,6 +75,16 @@ export function DatePickerForm() {
                 render={({ field }) => (
                   <SelectScrollable {...field} />
                 )}
+              />
+              <Controller
+              name="status"
+              control={form.control}
+              render={({ field }) => (
+                <ComboboxPopover
+                selectedStatus={field.value}
+                onChange={field.onChange}
+                />
+              )}
               />
               <Popover>
                 <PopoverTrigger asChild>
