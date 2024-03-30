@@ -2,6 +2,7 @@ import json
 import logging
 import urllib.request
 import uuid
+from typing import Optional
 
 from bs4 import BeautifulSoup
 from flask import Flask, jsonify, request
@@ -13,14 +14,13 @@ logger = logging.getLogger(__name__)
 app = Flask(__name__)
 CORS(app)
 
-def fetch_html(url):
+def fetch_html(url: str) -> Optional[bytes]:
     """
     指定されたURLからHTMLを取得
     Args:
-        url (str): 取得するHTMLのURL
+        取得するHTMLのURL
     Returns:
-        bytes: HTMLコンテンツ
-        エラーが発生した場合はNoneを返す
+        bytes: HTMLコンテンツ。エラーが発生した場合はNoneを返す。
     """
     try:
         with urllib.request.urlopen(url) as response:
