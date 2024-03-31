@@ -1,7 +1,9 @@
 import json
 import logging
+import time
 import urllib.request
 import uuid
+from typing import Optional
 
 from bs4 import BeautifulSoup
 from flask import Flask, jsonify, request
@@ -13,14 +15,13 @@ logger = logging.getLogger(__name__)
 app = Flask(__name__)
 CORS(app)
 
-def fetch_html(url):
+def fetch_html(url: str) -> Optional[bytes]:
     """
     指定されたURLからHTMLを取得
     Args:
-        url (str): 取得するHTMLのURL
+        取得するHTMLのURL
     Returns:
-        bytes: HTMLコンテンツ
-        エラーが発生した場合はNoneを返す
+        bytes: HTMLコンテンツ。エラーが発生した場合はNoneを返す。
     """
     try:
         with urllib.request.urlopen(url) as response:
@@ -145,27 +146,42 @@ def parse_price_details(html, event):
         logger.debug('Price table not found')
 
 
-@app.route('/scrape', methods=['POST'])
+# @app.route('/scrape', methods=['POST'])
+# def scrape():
+#     logger.debug(f'Received request: {request.args}')
+#     """
+#     クライアントからのリクエストに基づいてウェブスクレイピングを実行し、
+#     抽出したイベント情報をJSON形式で返す
+#     """
+#     data = request.json
+#     url = data.get('url')
+#     if not url:
+#         return jsonify({'error': 'URL is missing'}), 400
+    
+#     html = fetch_html(url)
+#     if html is None:
+#         return jsonify({'error': ' fetching the URL'}), 500
+    
+#     events_dict = extract_event_info(html)
+#     fetch_event_details(events_dict)
+#     logger.debug(f'Events: {json.dumps(events_dict, ensure_ascii=False)}')
+#     return json.dumps(events_dict, ensure_ascii=False)
+
+@app.route('/', methods=['POST'])
 def scrape():
     logger.debug(f'Received request: {request.args}')
     """
-    クライアントからのリクエストに基づいてウェブスクレイピングを実行し、
+    クライアントからのリクエストを取得
     抽出したイベント情報をJSON形式で返す
     """
+    time.sleep(2)
     data = request.json
-    url = data.get('url')
-    if not url:
-        return jsonify({'error': 'URL is missing'}), 400
-    
-    html = fetch_html(url)
-    if html is None:
-        return jsonify({'error': ' fetching the URL'}), 500
-    
-    events_dict = extract_event_info(html)
-    fetch_event_details(events_dict)
-    logger.debug(f'Events: {json.dumps(events_dict, ensure_ascii=False)}')
-    return json.dumps(events_dict, ensure_ascii=False)
-
+    logger.debug(f'dob:{data.get("dob")}')
+    logger.debug(f'district:{data.get("district")}')
+    return jsonify({
+        "status": "success",
+        "data": data
+    })
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0')

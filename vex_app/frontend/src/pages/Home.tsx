@@ -1,11 +1,7 @@
+import { DatePickerForm } from "@/components/DatePickerForm";
 import { Loader } from '@googlemaps/js-api-loader';
-import axios from 'axios';
-import { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
-const containerStyle = {
-  width: '800px',
-  height: '800px'
-};
 
 // 東京タワーの位置情報
 const tokyoTower = {
@@ -14,29 +10,7 @@ const tokyoTower = {
 };
 
 const Home = () => {
-  // リクエストに載せるURL
-  const [url, setUrl] = useState('');
-  // ユーザーがクリックした際に発火
-  const handleSubmit = async(e:React.FormEvent) => {
-    //フォームのデフォルト送信を防ぐ
-    e.preventDefault(); 
-    try{
-      // 指定したURL宛にHTTP POSTを送信
-      // ボディにはスクレイプ用のURLを含める
-      // TODO: URLの渡し方について、地名と日付で動的に変えられるように調整
-      // awaitで非同期リクエストが終わるまで待機
-      // 終了後、response.data(JSON)で値を取得
-      const response = await axios.post('http://localhost:5001/scrape', JSON.stringify({ url: url }), {
-        headers: {
-          // JSON形式であることを指定
-          'Content-Type': 'application/json',
-        },
-      });
-      console.log(response.data);
-    } catch (error) {
-      console.error('Error sending data to the backend', error);
-    }
-  };
+  const [date, setDate] = React.useState<Date | undefined>(new Date())
 
   // useStateでGoogleMapに表示した内容を保持
   const [map, setMap] = useState<google.maps.Map>();
@@ -74,7 +48,7 @@ const Home = () => {
           '<div id="bodyContent">' +
           '<p><b>東京タワー</b>は、日本の東京都港区にある電波塔です。' +
           '高さは333メートルで、日本の電波塔としては2番目に高い建築物です。</p>' +
-          '<p>詳細: <a href="https://ja.wikipedia.org/wiki/%E6%9D%B1%E4%BA%AC%E3%82%BF%E3%83%AF%E3%83%BC">' +
+          // '<p>詳細: <a href="https://ja.wikipedia.org/wiki/%E6%9D%B1%E4%BA%AC%E3%82%BF%E3%83%AF%E3%83%BC">' +
           'Wikipedia</a> ' +
           '(最終訪問: 2023年4月1日).</p>' +
           '</div>' +
@@ -104,18 +78,12 @@ const Home = () => {
 
   return (
     <div>
-      <form onSubmit={handleSubmit}>
-        <input
-          type="text"
-          value={url}
-          onChange={(e) => setUrl(e.target.value)}
-          placeholder="Enter URL to scrape"
-        />
-        <button type="submit">Submit</button>
-      </form>
-      <div ref={mapRef} style={containerStyle} />
+      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '40vh' }}>
+      <DatePickerForm />
+      </div>
+      <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center', height: '80vh'}} ref={mapRef} />
     </div>
   );
 };
+export default Home
 
-export default Home;
