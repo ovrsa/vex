@@ -31,16 +31,23 @@ import { ButtonLoading } from "./ui/reloadIcon"
 
 const FormSchema = z.object({
   // TODO 位置情報から住所情報を取得できるようにする
+  // フィールド上は住所を入力するようにする
+  // それ以外を入力するとエラーが出るようにする
   dob: z.date({
     required_error: "A date of birth is required.",
   }),
+  // 文字列以外を入力するとエラーが出るようにする
   district: z.string({
     required_error: "A status is required.",
   }),
 })
 
 export function DatePickerForm() {
+  // React Hook FormとZodを使ったフォームのバリデーション
+  // z.inferを使ってFormSchemaの型を推論
+  // これでform.getValues()の型がFormSchemaと同じになる
   const form = useForm<z.infer<typeof FormSchema>>({
+    // useFormの引数にzodResolverを使ってFormSchemaを渡す
     resolver: zodResolver(FormSchema),
   });
   const [isLoading, setIsLoading] = useState(false)

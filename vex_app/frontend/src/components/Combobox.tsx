@@ -15,13 +15,14 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover"
+import { cn } from "@/lib/utils"
 
 type District = {
   value: string
   label: string
 }
  
-// TODO DBでかんｒ
+// TODO DBで管理
 const districts: District[] = [
   {
     value: "北海道",
@@ -203,6 +204,10 @@ const districts: District[] = [
     value: "神奈川県(横須賀市)",
     label: "神奈川県(横須賀市)",
   },
+  {
+    value: "神奈川県(箱根町)",
+    label: "神奈川県(箱根町)",
+  },
   { 
     value: "千葉県",
     label: "千葉県",
@@ -356,6 +361,10 @@ const districts: District[] = [
     label: "兵庫県(姫路市)",
   },
   {
+    value: "兵庫県(西宮市)",
+    label: "兵庫県(西宮市)",
+  },
+  {
     value: "奈良県",
     label: "奈良県",
   },
@@ -475,8 +484,11 @@ export function ComboboxPopover({
     <div className="flex items-center space-x-4">
       <Popover open={open} onOpenChange={setOpen}>
         <PopoverTrigger asChild>
-          <Button variant="outline" 
-          className="w-[280px] justify-start m-auto opacity-50">
+          <Button variant={"outline"}
+          className={cn("w-[280px] justify-start m-auto font-normal",
+          !selectedDistrict && "text-muted-foreground",
+          "m-auto"
+          )}>
           {selectedDistrict ? <>{selectedDistrict.label}</> : <>Select District</>}
           </Button>
         </PopoverTrigger>
