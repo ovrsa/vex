@@ -1,11 +1,8 @@
-import json
 import logging
-import time
 
 from flask import jsonify, request
-
-from ..services.region_service import validate_data
-from ..services.scraper import process_request_data
+from services.region_service import process_request_data, validate_data
+from services.scraper import scrape_events
 
 logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
@@ -22,8 +19,6 @@ def init_app(app):
         クライアントからのリクエストを取得
         抽出したイベント情報をJSON形式で返す
         """
-        # backend-1   | DEBUG:services.region_service:dob:2024-04-29T15:00:00.000Z
-        # backend-1   | DEBUG:services.region_service:district:北海道(札幌市)
         data = request.json
         logger.debug(f'Request data: {data}')
         # リクエストデータのバリデーション
@@ -33,9 +28,12 @@ def init_app(app):
         try:
             # サービス層での処理を呼び出し
             processed_data = process_request_data(data)
+            # scraperでスクレイピング処理を呼び出し
+            scrape_data = scrape_events(processed_data)
+            # クライアントにJSON形式でイベント情報を返す
             return jsonify({
                 "status": 'success',
-                "data": processed_data
+                "data": scrape_data
             })
         except Exception as e:
             logger.error(f'Error processing request: {e}')

@@ -1,12 +1,10 @@
-import json
 import logging
-import time
 import urllib.request
 import uuid
 from typing import Optional
 
 from bs4 import BeautifulSoup
-from flask import Flask, jsonify, request
+from flask import Flask
 from flask_cors import CORS
 
 logging.basicConfig(level=logging.DEBUG)
@@ -14,6 +12,26 @@ logger = logging.getLogger(__name__)
 
 app = Flask(__name__)
 CORS(app)
+
+def scrape_events(data: dict):
+    """
+    イベント情報をスクレイピング
+    Args:
+        data (dict): リクエストデータ
+    Returns:
+        None
+    """
+    # URLの作成
+    url = f'https://www.walkerplus.com/event_list/{data["search_date"]}/{data["region_id"]}/'
+    html = fetch_html(url)
+    # イベント情報の抽出
+    events_dict = extract_event_info(html)
+    # イベントの詳細情報を取得
+    fetch_event_details(events_dict)
+    # クライアントにJSON形式でイベント情報を返す
+    logger.debug(f'Events: {events_dict}')
+    return events_dict
+
 
 def fetch_html(url: str) -> Optional[bytes]:
     """
