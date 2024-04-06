@@ -27,12 +27,14 @@ import { cn } from "@/lib/utils"
 import { useState } from "react"
 import { ComboboxPopover } from "./Combobox"
 import { ButtonLoading } from "./ui/reloadIcon"
- 
+
+// DatePickerFormコンポーネントのpropsの型を定義
+interface DatePickerFormProps {
+  onFormSubmit: (data: any) => void
+}
 
 const FormSchema = z.object({
   // TODO 位置情報から住所情報を取得できるようにする
-  // フィールド上は住所を入力するようにする
-  // それ以外を入力するとエラーが出るようにする
   dob: z.date({
     required_error: "A date of birth is required.",
   }),
@@ -42,7 +44,8 @@ const FormSchema = z.object({
   }),
 })
 
-export function DatePickerForm() {
+export function DatePickerForm({ onFormSubmit }:DatePickerFormProps) {
+  // onFormSubmitで親コンポーネントに成功したことを通知
   // React Hook FormとZodを使ったフォームのバリデーション
   // z.inferを使ってFormSchemaの型を推論
   // これでform.getValues()の型がFormSchemaと同じになる
@@ -64,7 +67,8 @@ export function DatePickerForm() {
           "Content-Type": "application/json",
         },
       });
-      console.log(response)
+      console.log(response.data);
+      onFormSubmit(response.data);
       toast({
         title: "You submitted the following values:",
         description: (
