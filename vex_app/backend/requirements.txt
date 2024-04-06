@@ -1,5 +1,6 @@
-requests
-beautifulsoup4
+requests==2.26.0
+beautifulsoup4==4.10.0
 Flask==3.0.2
 Werkzeug>=2.0
 flask-cors==3.0.10
+pytz==2022.1
