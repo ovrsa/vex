@@ -74,3 +74,14 @@
     @apply bg-background text-foreground;
   }
 }
+
+body, html {
+  margin: 0;
+  padding: 0;
+  /* Ensure full viewport width */
+  width: 100%;
+  /* Ensure full viewport height */
+  height: 100%;
+  /* Remove default margin and padding */
+  overflow: hidden; /* Prevent scrollbars from affecting the full-screen layout */
+}
