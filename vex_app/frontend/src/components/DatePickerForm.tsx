@@ -29,7 +29,7 @@ import { ComboboxPopover } from "./Combobox"
 import { ButtonLoading } from "./ui/reloadIcon"
 
 // DatePickerFormコンポーネントのpropsの型を定義
-interface DatePickerFormProps {
+type DatePickerFormProps =  {
   onFormSubmit: (data: any) => void
 }
 
