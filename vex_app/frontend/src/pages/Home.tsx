@@ -1,6 +1,11 @@
 import { DatePickerForm } from "@/components/DatePickerForm";
+import Logout from "@/components/Logout";
+// import { supabase } from '@/lib/utils';
+import { authState } from '@/state/authState';
 import { Loader } from '@googlemaps/js-api-loader';
 import React, { useEffect, useRef, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useSetRecoilState } from 'recoil';
 
 
 // 東京タワーの位置情報
@@ -9,7 +14,7 @@ const tokyoTower = {
   lng: 139.74556
 };
 
-interface EventDetails {
+type EventDetails = {
   event_name: string;
   住所: string;
   公式サイト: string;
@@ -19,7 +24,7 @@ interface EventDetails {
   駐車場: string;
 }
 
-interface EventData {
+type EventData = {
   data: {
     [key: string]: EventDetails;
   };
@@ -27,12 +32,17 @@ interface EventData {
 }
 
 const Home = () => {
+  const navigate = useNavigate();
+  const setAuth = useSetRecoilState(authState);
+  console.log('authState:', authState);
+
   const [date, setDate] = React.useState<Date | undefined>(new Date())
   // useStateでGoogleMapに表示した内容を保持
   const [map, setMap] = useState<google.maps.Map>();
   const mapRef = useRef<HTMLDivElement>(null);
   // DatepickerFormコンポーネントをインポート
   const [eventsData, setEventsData] = useState<any[]>([]);
+
   // useEffectでコンポーネントがマウントされた際に処理を実行
   const handleFormSubmit = (data: any) => {
     setEventsData([...eventsData, data]);
@@ -126,8 +136,14 @@ const Home = () => {
 
   return (
     <div>
-      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '40vh' }}>
-      <DatePickerForm onFormSubmit={handleFormSubmit} />
+      {/* ログアウトボタンを右上に配置するためのスタイルを適用したdiv */}
+      <div style={{ position: 'relative', height: '40vh' }}>
+        <div style={{ position: 'absolute', right: 0, top: 0, padding: '20px' }}>
+          <Logout />
+        </div>
+        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
+          <DatePickerForm onFormSubmit={handleFormSubmit} />
+        </div>
       </div>
       <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center', height: '80vh'}} ref={mapRef} />
     </div>

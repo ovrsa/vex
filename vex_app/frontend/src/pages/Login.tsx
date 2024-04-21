@@ -1,36 +1,36 @@
 import { supabase } from '@/lib/utils';
+import { authState } from '@/state/authState';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
+import { useSetRecoilState } from 'recoil';
 
 type LoginData = {
   email: string;
   password: string;
 };
 
-
 const LogIn = () => {
   const { register, handleSubmit, formState: { errors } } = useForm<LoginData>();
-  // useNavigate: 特定のイベントハンドラ内から、特定のパスに対してユーザーをリダイレクトさせることが出来る
-  const navigate = useNavigate(); 
-  
-  // Google認証のハンドラ
-  const handleGoogleSignup = async () => {
+  const navigate = useNavigate();
+  const setAuth = useSetRecoilState(authState);
+
+  const handleGoogleLogin = async () => {
+    // Google認証フローを開始
     const { error } = await supabase.auth.signInWithOAuth({
       provider: 'google',
     });
+  
     if (error) {
-      alert(`Signup Error: ${error.message}`);
+      console.error('Login error:', error.message);
+      alert('Login failed');
     } else {
-      // error以外はログイン成功
-      alert('Signup successful');
-      navigate('/');
+      alert('Login successful');
+      // TODO: ログイン成功後の処理
     }
   };
 
-  // メール認証のハンドラ
   const onSubmit = async (data: LoginData) => {
-    // 処理の中でErrorが発生した場合はerror
-    const { error } = await supabase.auth.signInWithPassword({
+    const { data: loginData, error } = await supabase.auth.signInWithPassword({
       email: data.email,
       password: data.password,
     });
@@ -38,9 +38,14 @@ const LogIn = () => {
     if (error) {
       alert(`Login Error: ${error.message}`);
     } else {
-      // Error以外はログイン成功とみなす
-      alert('Login Success');
-      navigate('/');
+      // メールアドレスとパスワードでのログイン成功後、セッション情報を取得
+      if (loginData.session) {
+        // localStorage.setItem('session', JSON.stringify(loginData.session));
+        setAuth(loginData.session);
+        console.log(loginData.session);
+        alert("Login successful");
+        navigate('/');
+      }
     }
   };
 
@@ -54,7 +59,7 @@ const LogIn = () => {
           <div className="space-y-4">
             <button 
               type="button" 
-              onClick={handleGoogleSignup} 
+              onClick={handleGoogleLogin} 
               className="w-full flex justify-center items-center py-2 px-4 border border-gray-300 rounded-lg shadow-sm bg-white text-sm font-medium text-gray-700 hover:bg-gray-50"
             >
             <img src="/google-icon.svg" alt="Google" className="h-5 w-5 mr-3" />
