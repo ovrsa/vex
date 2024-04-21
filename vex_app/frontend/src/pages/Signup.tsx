@@ -10,7 +10,6 @@ type SignupData = {
 
 const Signup = () => {
   const { register, handleSubmit, formState: { errors } } = useForm<SignupData>();
-  // useNavigate: 特定のイベントハンドラ内から、特定のパスに対してユーザーをリダイレクトさせることが出来る
   const navigate = useNavigate();
 
   // Google認証のハンドラ
@@ -18,30 +17,29 @@ const Signup = () => {
     const { error } = await supabase.auth.signInWithOAuth({
       provider: 'google',
     });
+
     if (error) {
+      console.error('Signup Error:', error);
       alert(`Signup Error: ${error.message}`);
-    } else {
-      // error以外はログイン成功
-      alert('Signup successful');
-      navigate('/');
+      return;
     }
   };
-  
+
   // メール認証のハンドラ
   const onSubmit = async (data: SignupData) => {
-    // errorが起きた場合はその内容をalert
-    const {error} = await supabase.auth.signUp({
+    const { error } = await supabase.auth.signUp({
       email: data.email,
-      password: data.password
-    })
-    console.log(data);
+      password: data.password,
+    });
+  
     if (error) {
-      alert(`Signup Error: ${error.message}`)
-      return
+      console.error('Signup Error:', error);
+      alert(`Signup Error: ${error.message}`);
+      return;
     } else {
-      // error以外はログイン成功とみなす
-      alert('Signup successful')
-      navigate('/');
+      alert('登録ありがとうございます。確認メールを送信しましたので、メール内のリンクをクリックしてアカウントを有効化してください。その後、ログイン画面からログインしてください。');
+      console.log('Signup successful:', error);
+      navigate('/login');
     }
   };
 

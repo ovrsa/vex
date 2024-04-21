@@ -29,7 +29,7 @@ import { ComboboxPopover } from "./Combobox"
 import { ButtonLoading } from "./ui/reloadIcon"
 
 // DatePickerFormコンポーネントのpropsの型を定義
-type DatePickerFormProps =  {
+interface DatePickerFormProps {
   onFormSubmit: (data: any) => void
 }
 
@@ -86,7 +86,7 @@ export function DatePickerForm({ onFormSubmit }:DatePickerFormProps) {
 
   return (
     <Form {...form}>
-      <form onSubmit={handleSubmit} className="space-y-8">
+      <form onSubmit={handleSubmit} className="space-y-8" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
         <FormField
           control={form.control}
           name="dob"
