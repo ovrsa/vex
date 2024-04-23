@@ -1,9 +1,11 @@
-// src/state/persist.ts
+// Recoil Persist
+// 状態管理ライブラリRecoilの状態を永続化するためのライブラリ
+
 import { recoilPersist } from 'recoil-persist'
 
 const { persistAtom } = recoilPersist({
-  key: 'recoil-persist', // このキーでローカルストレージに保存されます
-  storage: localStorage, // 使用するストレージの種類を指定
+  key: 'recoil-persist', 
+  storage: localStorage, 
 })
 
 export default persistAtom

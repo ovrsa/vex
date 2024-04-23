@@ -1,12 +1,13 @@
 "use client"
 
-import { zodResolver } from "@hookform/resolvers/zod"
-import { CalendarIcon } from "@radix-ui/react-icons"
+// react hook
 import axios from "axios"
 import { format } from "date-fns"
+import { useState } from "react"
 import { Controller, useForm } from "react-hook-form"
 import { z } from "zod"
 
+// ui components
 import { Button } from "@/components/ui/button"
 import { Calendar } from "@/components/ui/calendar"
 import {
@@ -22,61 +23,46 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover"
-import { toast } from "@/components/ui/use-toast"
 import { cn } from "@/lib/utils"
-import { useState } from "react"
-import { ComboboxPopover } from "./Combobox"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { CalendarIcon } from "@radix-ui/react-icons"
 import { ButtonLoading } from "./ui/reloadIcon"
 
-// DatePickerFormコンポーネントのpropsの型を定義
-interface DatePickerFormProps {
+import { ComboboxPopover } from "./Combobox"
+
+
+type DatePickerFormProps = {
   onFormSubmit: (data: any) => void
 }
 
+// フォームバリデーション
 const FormSchema = z.object({
   // TODO 位置情報から住所情報を取得できるようにする
-  dob: z.date({
+  selectedDate: z.date({
     required_error: "A date of birth is required.",
   }),
-  // 文字列以外を入力するとエラーが出るようにする
   district: z.string({
     required_error: "A status is required.",
   }),
 })
 
-export function DatePickerForm({ onFormSubmit }:DatePickerFormProps) {
-  // onFormSubmitで親コンポーネントに成功したことを通知
-  // React Hook FormとZodを使ったフォームのバリデーション
-  // z.inferを使ってFormSchemaの型を推論
-  // これでform.getValues()の型がFormSchemaと同じになる
-  const form = useForm<z.infer<typeof FormSchema>>({
-    // useFormの引数にzodResolverを使ってFormSchemaを渡す
+export const DatePickerForm = ({ onFormSubmit }:DatePickerFormProps) => {
+  const datePickerForm = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
   });
-  const [isLoading, setIsLoading] = useState(false)
+  const [isLoading, setIsLoading] = useState(false) // リクエスト送信中のローディング状態
 
-  // リクエスト送信処理
-  const handleSubmit = async(e: React.FormEvent) => {
-    e.preventDefault()
-    setIsLoading(true) // リクエスト送信中
-    const data = form.getValues();
-    console.log(data)
+  const handleFormSubmit = async(e: React.FormEvent) => {
+    e.preventDefault() // ページリロードを防ぐ
+    setIsLoading(true)
+    const formData = datePickerForm.getValues();
     try {
-      const response = await axios.post("http://localhost:5001/", JSON.stringify(data),{
+      const response = await axios.post("http://localhost:5001/", JSON.stringify(formData),{
         headers: {
           "Content-Type": "application/json",
         },
       });
-      console.log(response.data);
       onFormSubmit(response.data);
-      toast({
-        title: "You submitted the following values:",
-        description: (
-          <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-            <code className="text-white">{JSON.stringify(data, null, 2)}</code>
-          </pre>
-        ),
-      });
     } catch (error) {
       console.error(error)
     } finally {
@@ -85,16 +71,16 @@ export function DatePickerForm({ onFormSubmit }:DatePickerFormProps) {
   };
 
   return (
-    <Form {...form}>
-      <form onSubmit={handleSubmit} className="space-y-8" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+    <Form {...datePickerForm}>
+      <form onSubmit={handleFormSubmit} className="space-y-8" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
         <FormField
-          control={form.control}
-          name="dob"
+          control={datePickerForm.control}
+          name="selectedDate"
           render={({ field }) => (
             <FormItem className="flex flex-col">
               <Controller
               name="district"
-              control={form.control}
+              control={datePickerForm.control}
               render={({ field }) => (
                 <ComboboxPopover
                 selectedDistrict={field.value}
@@ -102,6 +88,7 @@ export function DatePickerForm({ onFormSubmit }:DatePickerFormProps) {
                 />
               )}
               />
+
               <Popover>
                 <PopoverTrigger asChild>
                   <FormControl>
@@ -134,6 +121,7 @@ export function DatePickerForm({ onFormSubmit }:DatePickerFormProps) {
                   />
                 </PopoverContent>
               </Popover>
+              
               <FormDescription>
                 Please select a district and date, then click Submit.
               </FormDescription>
@@ -141,6 +129,7 @@ export function DatePickerForm({ onFormSubmit }:DatePickerFormProps) {
             </FormItem>
           )}
         />
+        
         <Button type="submit" className="submit-button" disabled={isLoading}>
           {isLoading ? <ButtonLoading /> : 'Submit'}
         </Button>
