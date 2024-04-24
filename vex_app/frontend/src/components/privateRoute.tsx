@@ -6,7 +6,7 @@ interface PrivateRouteProps {
   children: JSX.Element;
 }
 
-const PrivateRoute = ({ children }: PrivateRouteProps) => {
+export const PrivateRoute = ({ children }: PrivateRouteProps) => {
   const auth = useRecoilValue(authState);
 
   // authがnullならログインページにリダイレクト
@@ -17,4 +17,3 @@ const PrivateRoute = ({ children }: PrivateRouteProps) => {
   return children;
 };
 
-export default PrivateRoute;

@@ -15,7 +15,6 @@ const LogIn = () => {
   const setAuth = useSetRecoilState(authState);
 
   const handleGoogleLogin = async () => {
-    // Google認証フローを開始
     const { error } = await supabase.auth.signInWithOAuth({
       provider: 'google',
     });
@@ -29,7 +28,7 @@ const LogIn = () => {
     }
   };
 
-  const onSubmit = async (data: LoginData) => {
+  const handleEmailLogin = async (data: LoginData) => {
     const { data: loginData, error } = await supabase.auth.signInWithPassword({
       email: data.email,
       password: data.password,
@@ -40,7 +39,6 @@ const LogIn = () => {
     } else {
       // メールアドレスとパスワードでのログイン成功後、セッション情報を取得
       if (loginData.session) {
-        // localStorage.setItem('session', JSON.stringify(loginData.session));
         setAuth(loginData.session);
         console.log(loginData.session);
         alert("Login successful");
@@ -53,11 +51,11 @@ const LogIn = () => {
   return (
     <div className="h-full min-h-screen flex justify-center items-center w-full" style={{ background: 'linear-gradient(to bottom right, #F5F6FF, #F5F6FF)' }}>
       <div className="bg-white p-8 rounded-lg shadow-lg max-w-sm w-full backdrop-filter backdrop-blur-lg bg-opacity-30 border border-gray-100">
-        <h2 className="text-2xl mb-8 text-center">Login</h2>
+        <h2 className="text-2xl mb-8 text-center">Login</h2 >
 
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+        <form onSubmit={handleSubmit(handleEmailLogin)} className="space-y-6">
           <div className="space-y-4">
-            <button 
+            <button
               type="button" 
               onClick={handleGoogleLogin} 
               className="w-full flex justify-center items-center py-2 px-4 border border-gray-300 rounded-lg shadow-sm bg-white text-sm font-medium text-gray-700 hover:bg-gray-50"

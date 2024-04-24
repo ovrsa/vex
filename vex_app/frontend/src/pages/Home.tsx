@@ -1,14 +1,12 @@
 import { DatePickerForm } from "@/components/DatePickerForm";
 import Logout from "@/components/Logout";
-// import { supabase } from '@/lib/utils';
-import { authState } from '@/state/authState';
+import useEventData from "@/hooks/useEventData";
+import { useGoogleMap } from "@/hooks/useGoogleMap";
 import { Loader } from '@googlemaps/js-api-loader';
-import React, { useEffect, useRef, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useSetRecoilState } from 'recoil';
+import { useEffect, useRef, useState } from 'react';
 
 
-// 東京タワーの位置情報
+// 初期値
 const tokyoTower = {
   lat: 35.65861,
   lng: 139.74556
@@ -32,22 +30,18 @@ type EventData = {
 }
 
 const Home = () => {
-  const navigate = useNavigate();
-  const setAuth = useSetRecoilState(authState);
-  console.log('authState:', authState);
-
-  const [date, setDate] = React.useState<Date | undefined>(new Date())
   // useStateでGoogleMapに表示した内容を保持
   const [map, setMap] = useState<google.maps.Map>();
   const mapRef = useRef<HTMLDivElement>(null);
-  // DatepickerFormコンポーネントをインポート
   const [eventsData, setEventsData] = useState<any[]>([]);
 
   // useEffectでコンポーネントがマウントされた際に処理を実行
   const handleFormSubmit = (data: any) => {
     setEventsData([...eventsData, data]);
-    console.log('formSubmitdata:', data);
   }
+
+  useGoogleMap(import.meta.env.VITE_APP_GOOGLE_MAPS_API_KEY, mapRef, tokyoTower);
+  useEventData();
   // googlemaps/js-api-loaderのLoaderを使用
   useEffect(() => {
     const loader = new Loader({
@@ -55,7 +49,7 @@ const Home = () => {
       version: "weekly",
     });
     // GoogleMapAPIを非同期にロード
-    // このメソッドはPromiseを返すので、.then()使用してロードされたあとの処理を記述できる
+    // このメソッドはPromiseを返すので.thenを使用してロードされたあとの処理を記述
     loader.load().then(() => {
       if (mapRef.current) {
         const map = new google.maps.Map(mapRef.current, {
@@ -67,11 +61,9 @@ const Home = () => {
         setMap(map);
         // Sessionストレージからイベントデータを取得
         const storedEvents = sessionStorage.getItem('eventsData');
-        console.log('storedEvents:', storedEvents);
         if (storedEvents) {
           const eventsData = JSON.parse(storedEvents);
           setEventsData(eventsData);
-          console.log('eventsData:', eventsData);
         }
       }
     });
@@ -91,7 +83,6 @@ const Home = () => {
           const date = eventDetails['開催日'];
           const time = eventDetails['開催時間'];
           const parking = eventDetails['駐車場'];
-          console.log('address:', address);
           if (address) {
             geocoder.geocode({ address: address }, (results, status) => {
               if (status === 'OK' && results && results[0]) {
@@ -136,7 +127,6 @@ const Home = () => {
 
   return (
     <div>
-      {/* ログアウトボタンを右上に配置するためのスタイルを適用したdiv */}
       <div style={{ position: 'relative', height: '40vh' }}>
         <div style={{ position: 'absolute', right: 0, top: 0, padding: '20px' }}>
           <Logout />
