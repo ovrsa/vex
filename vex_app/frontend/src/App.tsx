@@ -8,8 +8,8 @@ import { AppInitializer } from './setup/AppInitializer';
 
 // pages
 import Home from './pages/Home';
-import LogIn from './pages/Login';
-import Signup from './pages/Signup';
+import { LogIn } from './pages/Login';
+import { Signup } from './pages/Signup';
 
 
 export const App = () => {

@@ -1,37 +1,36 @@
 // react hooks
-import { LoginData, useEmailLogin } from '@/hooks/useEmaillogin';
-import { useGoogleLogin } from '@/hooks/useGoogleLogin';
-import { FieldValues, useForm } from 'react-hook-form';
+import { SignupData, useEmailSignup } from "@/hooks/useEmailSignup";
+import { useGoogleSignup } from "@/hooks/useGoogleSignup";
+import { useForm } from "react-hook-form";
 
 // assets
 import googleIcon from '@/assets/google-icon.png';
 
-export const LoginForm = () => {
+export const SignupForm = () => {
     /**
-     * ログインフォーム
+     * サインアップフォーム
      */
-    const {register, handleSubmit, formState:{errors}} = useForm();
-    const {handleGoogleLogin} = useGoogleLogin();
-    const {handleEmailLogin} = useEmailLogin();
+    const {register, handleSubmit, formState:{errors}} = useForm<SignupData>();
+    const {handleGoogleSignup} = useGoogleSignup();
+    const {handleEmailSignup} = useEmailSignup();
 
-    const onSubmit = (data: FieldValues) => {
-        handleEmailLogin(data as LoginData);
+    const onSubmit = (data: SignupData) => {
+        handleEmailSignup(data as SignupData);
     }
 
-  
-  return (
+return(
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-        <h2 className="text-2xl mb-8 text-center">Login</h2 >
+        <h2 className="text-2xl mb-8 text-center">Create Account</h2 >
 
         {/* Google */}
         <div className="space-y-4">
             <button
                 type="button"
-                onClick={handleGoogleLogin} 
+                onClick={handleGoogleSignup} 
                 className="w-full flex justify-center items-center py-2 px-4 border border-gray-300 rounded-lg shadow-sm bg-white text-sm font-medium text-gray-700 hover:bg-gray-50"
             >
             <img src={googleIcon} alt="Google" className="h-4 w-4 mr-3" />
-                Sign in with Google
+                Sign up with Google
             </button>
             <div className="text-center text-sm text-gray-500">or</div>
         </div>
@@ -61,13 +60,13 @@ export const LoginForm = () => {
         </div>
 
         {/* Submit */}
-        <button type="submit" className="w-full bg-blue-600 text-white p-2 rounded-lg">Log In</button>
+        <button type="submit" className="w-full bg-blue-600 text-white p-2 rounded-lg">Create Account</button>
 
         <div className="mt-6 text-center">
-          <span className="text-sm text-gray-700">Didn't have an account?</span>
-          <a href="/signup" className="text-blue-600 text-sm hover:underline">Sign up now</a>
+            <span className="text-sm text-gray-700">Already have an account?</span>
+            <a href="/login" className="text-blue-600 text-sm hover:underline">Login now</a>
         </div>
     </form>
-  );
-};
+);
+}
 
