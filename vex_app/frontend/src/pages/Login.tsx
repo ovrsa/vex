@@ -1,9 +1,9 @@
 import { LoginForm } from '@/components/LoginForm';
 
 
-const LogIn = () => {
+export const LogIn = () => {
   /**
-   * ユーザーがログインするためのフォーム
+   * ユーザーがログインするためのページ
    */
   
   return (
@@ -14,5 +14,3 @@ const LogIn = () => {
     </div>
   );
 };
-
-export default LogIn;

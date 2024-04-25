@@ -1,6 +1,7 @@
 import { supabase } from '@/lib/utils';
 
 export const useGoogleLogin = () => {
+    // Googleログイン処理
   const handleGoogleLogin = async () => {
     const { error } = await supabase.auth.signInWithOAuth({
       provider: 'google',
@@ -14,6 +15,5 @@ export const useGoogleLogin = () => {
       // TODO: ログイン成功後の処理
     }
   };
-
   return { handleGoogleLogin };
 };
