@@ -8,8 +8,9 @@ import { Controller, useForm } from "react-hook-form"
 import { z } from "zod"
 
 // ui components
-import { Button } from "@/components/ui/button"
-import { Calendar } from "@/components/ui/calendar"
+import { cn } from "@/lib/utils"
+import { Button } from "@/ui/button"
+import { Calendar } from "@/ui/calendar"
 import {
   Form,
   FormControl,
@@ -17,44 +18,57 @@ import {
   FormField,
   FormItem,
   FormMessage
-} from "@/components/ui/form"
+} from "@/ui/form"
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@/components/ui/popover"
-import { cn } from "@/lib/utils"
+} from "@/ui/popover"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { CalendarIcon } from "@radix-ui/react-icons"
-import { ButtonLoading } from "./ui/reloadIcon"
+import { ButtonLoading } from "../ui/reloadIcon"
 
-import { ComboboxPopover } from "./Combobox"
+// components
+import { DistrictSelectPopover } from "./DistrictSelectBox"
 
 
 type DatePickerFormProps = {
-  onFormSubmit: (data: any) => void
+  onFormSubmit: (data: FormData) => void
 }
 
 // フォームバリデーション
 const FormSchema = z.object({
   // TODO 位置情報から住所情報を取得できるようにする
-  selectedDate: z.date({
-    required_error: "A date of birth is required.",
+  selectedDate: z.date().refine(date => date instanceof Date, {
+    message: "The selected date is not valid.",
   }),
-  district: z.string({
-    required_error: "A status is required.",
+  district: z.string().min(1,{
+    message: "The selected district information is not valid.",
   }),
 })
 
 export const DatePickerForm = ({ onFormSubmit }:DatePickerFormProps) => {
+  /**
+   *  日付と地区を選択するためのフォーム
+   * ユーザーがフォームを送信すると、
+   * 選択された日付と地区の情報がサーバーにPOSTリクエストとして送信される
+   * 
+   * - `Button`: フォームの送信ボタン
+   * - `Calendar`: 日付を選択するためのカレンダーUI
+   * - `DistrictSelectPopover`: 地区を選択するためのポップオーバー
+   */
   const datePickerForm = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
+    defaultValues: {
+      selectedDate: new Date(),
+      district: '東京都(港区)',
+    }
   });
-  const [isLoading, setIsLoading] = useState(false) // リクエスト送信中のローディング状態
+  const [isLoading, setIsLoading] = useState(false) 
 
   const handleFormSubmit = async(e: React.FormEvent) => {
-    e.preventDefault() // ページリロードを防ぐ
-    setIsLoading(true)
+    e.preventDefault() 
+    setIsLoading(true) // リクエスト送信中
     const formData = datePickerForm.getValues();
     try {
       const response = await axios.post("http://localhost:5001/", JSON.stringify(formData),{
@@ -65,6 +79,7 @@ export const DatePickerForm = ({ onFormSubmit }:DatePickerFormProps) => {
       onFormSubmit(response.data);
     } catch (error) {
       console.error(error)
+      alert("Failed to submit the form. Please try again later.")
     } finally {
       setIsLoading(false) // リクエスト送信完了
     } 
@@ -72,7 +87,9 @@ export const DatePickerForm = ({ onFormSubmit }:DatePickerFormProps) => {
 
   return (
     <Form {...datePickerForm}>
-      <form onSubmit={handleFormSubmit} className="space-y-8" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+      <form onSubmit={handleFormSubmit} 
+      className="space-y-8" 
+      style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
         <FormField
           control={datePickerForm.control}
           name="selectedDate"
@@ -82,7 +99,7 @@ export const DatePickerForm = ({ onFormSubmit }:DatePickerFormProps) => {
               name="district"
               control={datePickerForm.control}
               render={({ field }) => (
-                <ComboboxPopover
+                <DistrictSelectPopover
                 selectedDistrict={field.value}
                 onChange={field.onChange}
                 />
@@ -115,7 +132,7 @@ export const DatePickerForm = ({ onFormSubmit }:DatePickerFormProps) => {
                     selected={field.value}
                     onSelect={field.onChange}
                     disabled={(date) =>
-                      date < new Date("1900-01-01")
+                      date < new Date("2000-01-01")
                     }
                     initialFocus
                   />

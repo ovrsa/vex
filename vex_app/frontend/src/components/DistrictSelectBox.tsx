@@ -7,24 +7,36 @@ import React, { useMemo } from "react"
 import { District, districts } from "@/data/districts"
 
 // ui components
-import { Button } from "@/components/ui/button"
+import { cn } from "@/lib/utils"
+import { Button } from "@/ui/button"
 import {
   Command,
   CommandGroup,
   CommandInput,
   CommandItem,
   CommandList
-} from "@/components/ui/command"
+} from "@/ui/command"
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@/components/ui/popover"
-import { cn } from "@/lib/utils"
+} from "@/ui/popover"
 
 
-export const ComboboxPopover = ({onChange}: {
+export const DistrictSelectPopover = ({onChange}: {
+  /** 
+   * 地区選択
+   * 地区のデータは "@/data/districts" から取得
+   * ユーザーがリストから地区を選択すると、`onChange` 関数が呼び出され、
+   * 選択された地区の値が親コンポーネントに通知される
+   * 
+   * onChange - 地区選択
+   * selectedDistrict - 選択された地区
+   * open - ポップオーバーの開閉
+   * value - 選択された地区の値
+   */
   onChange: (value: string | null) => void;
+  selectedDistrict: string;
 }) => {
   const [open, setOpen] = React.useState(false)
   const [selectedDistrict, setSelectedDistrict] = React.useState<District | null>(null);
