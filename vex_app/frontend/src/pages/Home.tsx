@@ -1,4 +1,4 @@
-import { DatePickerForm } from "@/components/DatePickerForm";
+import { DatePickerForm } from "@/components/DatePickForm";
 import Logout from "@/components/Logout";
 import useEventData from "@/hooks/useEventData";
 import { useGoogleMap } from "@/hooks/useGoogleMap";
