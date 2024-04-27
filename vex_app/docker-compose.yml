@@ -11,15 +11,15 @@ services:
       - /app/node_modules
     environment:
       - NODE_ENV=development
-  # backend:
-  #   build:
-  #     context: ./backend
-  #     dockerfile: Dockerfile
-  #   ports:
-  #     - "5001:5000"
-  #   volumes:
-  #     - ./backend:/app
-  #     - /app/venv
-  #   environment:
-  #     - FLASK_ENV=development
-  #   command: ["flask", "run", "--host=0.0.0.0"]
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "5001:5000"
+    volumes:
+      - ./backend:/app
+      - /app/venv
+    environment:
+      - FLASK_ENV=development
+    command: ["flask", "run", "--host=0.0.0.0"]
