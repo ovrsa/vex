@@ -39,7 +39,6 @@ export const LoginForm = () => {
         {/* email */}
         <div>
             <input
-                id="email"
                 type="email"
                 {...register('email', { required: true })}
                 className="w-full p-2 border border-gray-300 rounded-lg bg-white bg-opacity-50 placeholder-gray-400"
@@ -64,8 +63,8 @@ export const LoginForm = () => {
         <button type="submit" className="w-full bg-blue-600 text-white p-2 rounded-lg">Log In</button>
 
         <div className="mt-6 text-center">
-          <span className="text-sm text-gray-700">Didn't have an account?</span>
-          <a href="/signup" className="text-blue-600 text-sm hover:underline">Sign up now</a>
+            <span className="text-sm text-gray-700">Didn't have an account?</span>
+            <a href="/signup" className="text-blue-600 text-sm hover:underline">Sign up now</a>
         </div>
     </form>
   );
