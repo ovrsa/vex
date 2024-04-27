@@ -11,7 +11,7 @@
 ## 使用画面
 | Login | Signup | Home |
 | :---: | :---: | :---: |
-| ![Login](public/app_images/Login.jpg) | ![Signup](public/app_images/Signup.jpg) | ![Home](public/app_images/Home.jpg) |
+| ![Login](public/app_images/Login.png) | ![Signup](public/app_images/Signup.png) | ![Home](public/app_images/Home.png) |
 | Loginを実施 | Signupを実施 | イベント情報の取得 |
 | Google | Google | 地名 |
 | Email | Email | 日付をCalendarから選択 |
