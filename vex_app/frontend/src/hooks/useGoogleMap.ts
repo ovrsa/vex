@@ -4,7 +4,8 @@ import { RefObject, useEffect, useState } from 'react';
 export const useGoogleMap = (
     apiKey: string,
     mapRef: RefObject<HTMLDivElement>,
-    initialPosition: { lat: number; lng: number }
+    initialPosition: { lat: number; lng: number },
+    eventsData: any[]
     ) => {
   const [map, setMap] = useState<google.maps.Map>();
 
@@ -21,9 +22,27 @@ export const useGoogleMap = (
           zoom: 11,
         });
         setMap(map);
+
+        if (eventsData.length > 0) {
+          const geocoder = new google.maps.Geocoder();
+          eventsData.forEach((event: any) => {
+            const address = event.address;
+            if (address) {
+              geocoder.geocode({ address: address }, (results, status) => {
+                if (status === 'OK' && results && results[0]) {
+                  const marker = new google.maps.Marker({
+                    map: map,
+                    position: results[0].geometry.location,
+                    title: event.title,
+                  });
+                }
+              });
+            }
+          });
+        }
       }
     });
-  }, [apiKey, mapRef, initialPosition]);
+  }, [apiKey, mapRef, initialPosition, eventsData]);
 
   return map;
 };

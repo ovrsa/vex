@@ -7,7 +7,7 @@ import { PrivateRoute } from './components/PrivateRoute';
 import { AppInitializer } from './setup/AppInitializer';
 
 // pages
-import Home from './pages/Home';
+import { Home } from './pages/Home';
 import { LogIn } from './pages/Login';
 import { Signup } from './pages/Signup';
 
