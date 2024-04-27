@@ -16,7 +16,7 @@ def validate_data(data: dict) -> bool:
     # TODO: Implement the validate_data function
     return True
 
-def get_region_id(region_name):
+def get_region_id(region_name: str) -> int:
     """
     地域名から地域IDを取得
     Args:
@@ -33,7 +33,7 @@ def get_region_id(region_name):
         
 def get_search_date(data: dict) -> str:
     """検索する日付を取得"""
-    utc_dob_str = data['dob']
+    utc_dob_str = data['selectedDate']
     utc_dob = datetime.strptime(utc_dob_str, '%Y-%m-%dT%H:%M:%S.%fZ')
     logger.debug(f'utc_dob:{utc_dob}')
     # UTCを日本時間に変更
@@ -53,7 +53,7 @@ def process_request_data(data: dict) -> dict:
     logger.debug(f'region_id:{region_id}')
     processed_data['region_id'] = region_id
     # 検索する日付を取得
-    processed_data['dob'] = data['dob']
+    processed_data['dob'] = data['selectedDate']
     # mmddの形式に変換
     processed_data['search_date'] = get_search_date(data)
     logger.debug(f'processed_data:{processed_data}')
