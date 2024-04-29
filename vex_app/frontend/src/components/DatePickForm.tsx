@@ -8,9 +8,8 @@ import { Controller, useForm } from "react-hook-form"
 import { z } from "zod"
 
 // ui components
-import { cn } from "@/lib/utils"
-import { Button } from "@/ui/button"
-import { Calendar } from "@/ui/calendar"
+import { Button } from "@/components/ui/button"
+import { Calendar } from "@/components/ui/calendar"
 import {
   Form,
   FormControl,
@@ -18,15 +17,16 @@ import {
   FormField,
   FormItem,
   FormMessage
-} from "@/ui/form"
+} from "@/components/ui/form"
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@/ui/popover"
+} from "@/components/ui/popover"
+import { cn } from "@/lib/utils"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { CalendarIcon } from "@radix-ui/react-icons"
-import { ButtonLoading } from "../ui/reloadIcon"
+import { ButtonLoading } from "./ui/reloadIcon"
 
 // components
 import { DistrictSelectPopover } from "./DistrictSelectBox"
