@@ -31,8 +31,8 @@ export const DropDownMenu = () => {
     >
       <img
         src="/user_icon.png"
-        width="29" 
-        height="29"
+        width="33" 
+        height="33"
         alt="Avatar"
         className="overflow-hidden rounded-full"
       />
