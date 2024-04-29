@@ -1,6 +1,7 @@
 import { DatePickerForm } from "@/components/DatePickForm";
+import { DropDownMenu } from "@/components/DropDownMenu";
 import { GoogleMap } from "@/components/GoogleMap";
-import { Logout } from "@/components/Logout";
+// import { useLogout } from '@/components/Logout';
 import { useState } from "react";
 
 
@@ -16,23 +17,25 @@ export const Home = () => {
   }
   
   return (
-    <div style={{ position: 'relative', height: '40vh' }}>
+    <div style={{ position: 'relative', height: '130vh', background: 'linear-gradient(to bottom right, #F5F6FF, #F5F6FF)' }}>
 
       {/* account */}
-      <div style={{ position: 'absolute', right: 0, top: 0, padding: '20px' }}>
-        <Logout />
+      <div style={{  position: 'absolute', right: 0, top: 0, padding: '20px' }}>
+        <DropDownMenu />
       </div>
-
+  
       {/* DatePickerForm */}
-      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
+      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'flex-start', height: '40vh', paddingTop: '120px' }}>  
         <DatePickerForm onFormSubmit={handleFormSubmit} />
       </div>
-
+  
       {/* GoogleMap */}
-      <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center', height: '80vh', paddingTop: '100px'}}>
-        <GoogleMap eventsData={eventsData} />
+      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '90vh' }}>  
+        <div style={{ width: '100%', maxWidth: '1000px', margin: '0 auto' }}>
+          <GoogleMap eventsData={eventsData} />
+        </div>
       </div>
-
+  
     </div>
   );
 };
