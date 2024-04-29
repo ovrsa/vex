@@ -1,5 +1,5 @@
 // src/state/authState.ts
-import { atom, RecoilState } from 'recoil';
+import { atom } from 'recoil';
 import persistAtom from './persist';
 
 export const authState = atom({
@@ -8,13 +8,8 @@ export const authState = atom({
   effects_UNSTABLE: [persistAtom] 
 });
 
-// User型の定義が必要です
-interface User {
-  // ユーザー情報の型定義
-}
-
-export const userItemState: RecoilState<User> = atom({
-  key: 'userItemState',
-  default: {}, 
+export const eventDataState = atom({
+  key: 'eventDataState',
+  default: [], 
   effects_UNSTABLE: [persistAtom] 
 });

@@ -1,5 +1,9 @@
 import { useGoogleMap } from "@/hooks/useGoogleMap";
+import { eventDataState } from "@/state/authState";
 import { useEffect, useRef } from "react";
+import { useRecoilState } from "recoil";
+import { ResetMapButton } from "./ResetMapButton";
+
 
 const tokyoTower = {
     lat: 35.65861,
@@ -27,16 +31,15 @@ export const GoogleMap = ({eventsData}: {eventsData: any[]}) => {
     /**
      * GoogleMapに表示するイベントデータを管理
      */
-    // useStateでGoogleMapに表示した内容を保持
+  const [storedEvents, setStoredEvents] = useRecoilState(eventDataState);
   const mapRef = useRef<HTMLDivElement>(null);
   const map = useGoogleMap(import.meta.env.VITE_APP_GOOGLE_MAPS_API_KEY, mapRef, tokyoTower, eventsData);
   
   useEffect(() => {
+    setStoredEvents(eventsData);
     if (map && eventsData.length > 0) {
-      // mapが存在し、eventsDataが存在する場合
       const geocoder = new google.maps.Geocoder();
-      // geocoderを使用して住所から緯度経度を取得
-      eventsData.forEach((event: EventData) => {
+      eventsData.forEach((event: EventData) =>{
         Object.values(event.data).forEach((eventDetails: EventDetails) => {
           const address = eventDetails['住所'];
           const event_name = eventDetails.event_name;
@@ -66,7 +69,6 @@ export const GoogleMap = ({eventsData}: {eventsData: any[]}) => {
                                 <div style="display: flex;"><span style="min-width: 80px; font-weight: bold;">parking</span><span>${parking}</span></div>
                               </div>`,
                   });
-                // マーカーをクリックしたときにInfoWindowを開く
                 marker.addListener("click", () => {
                   infowindow.open({
                     anchor: marker,
@@ -82,11 +84,19 @@ export const GoogleMap = ({eventsData}: {eventsData: any[]}) => {
         });
       });
     }
-    // イベントデータをセッションストレージに保存
-    sessionStorage.setItem('eventsData', JSON.stringify(eventsData));
-    // TODO: 画面をリロードするとマーカーが消えてしまうので、リロードしてもマーカーが消えないように設定
   }, [map, eventsData]);
+
   return (
-    <div ref={mapRef} style={{ height: "100vh", width: "100%" }}></div>
+    <div>
+
+      <div className="flex justify-end">
+        <ResetMapButton />
+      </div>
+
+      <div ref={mapRef} style={{ height: "100vh", width: "100%" }}>
+        Loading...
+      </div>
+
+    </div>
   )
 }

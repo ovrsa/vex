@@ -1,8 +1,8 @@
 import { DatePickerForm } from "@/components/DatePickForm";
 import { DropDownMenu } from "@/components/DropDownMenu";
 import { GoogleMap } from "@/components/GoogleMap";
-// import { useLogout } from '@/components/Logout';
-import { useState } from "react";
+import { eventDataState } from "@/state/authState";
+import { useRecoilState } from "recoil";
 
 
 export const Home = () => {
@@ -10,7 +10,7 @@ export const Home = () => {
    * フォームから送信されたイベントデータを管理
    * GoogleMapに表示
    */
-  const [eventsData, setEventsData] = useState<any[]>([]);
+  const [eventsData, setEventsData] = useRecoilState(eventDataState);
 
   const handleFormSubmit = (data: any) => {
     setEventsData([...eventsData, data]);

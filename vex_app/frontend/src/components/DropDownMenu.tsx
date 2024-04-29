@@ -41,7 +41,7 @@ export const DropDownMenu = () => {
 
   {/* dropdown */}
   <DropdownMenuContent className="w-56">
-    <DropdownMenuLabel>{user.email || "My Account"}</DropdownMenuLabel>
+    <DropdownMenuLabel>{user ? user.email : "My Account"}</DropdownMenuLabel>
 
     <DropdownMenuSeparator />
     <DropdownMenuGroup>
