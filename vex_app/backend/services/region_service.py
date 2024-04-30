@@ -18,7 +18,7 @@ def validate_data(data: dict) -> bool:
 
 def get_region_id(region_name: str) -> int:
     """
-    地域名から地域IDを取得
+    スクレイピングを行うために地域名から地域IDを取得
     Args:
         region_name (str): 地域名
     Returns:
@@ -36,11 +36,8 @@ def get_search_date(data: dict) -> str:
     utc_dob_str = data['selectedDate']
     utc_dob = datetime.strptime(utc_dob_str, '%Y-%m-%dT%H:%M:%S.%fZ')
     logger.debug(f'utc_dob:{utc_dob}')
-    # UTCを日本時間に変更
     jst_timezone = pytz.timezone('Asia/Tokyo')
     jst_dob = utc_dob.replace(tzinfo=pytz.utc).astimezone(jst_timezone)
-    # logger.debug(f'jst_dob:{jst_dob}')
-    # 2024-04-04 00:00:00+09:00を0404の形式に変換
     dob = jst_dob.strftime('%m%d')
     logger.debug(f'dob:{dob}')
     return dob
@@ -48,13 +45,8 @@ def get_search_date(data: dict) -> str:
 def process_request_data(data: dict) -> dict:
     """リクエストデータを処理"""
     processed_data = {}
-    # リージョンのIDを取得
-    region_id = get_region_id(data['district'])
-    logger.debug(f'region_id:{region_id}')
-    processed_data['region_id'] = region_id
-    # 検索する日付を取得
+    processed_data['region_id'] = get_region_id(data['district'])
     processed_data['dob'] = data['selectedDate']
-    # mmddの形式に変換
     processed_data['search_date'] = get_search_date(data)
     logger.debug(f'processed_data:{processed_data}')
     return processed_data

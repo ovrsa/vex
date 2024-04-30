@@ -20,7 +20,6 @@ export const DropDownMenu = () => {
   const user = useSession();
  
  return (
-
   <DropdownMenu>
   {/* icon */}
   <DropdownMenuTrigger asChild>
@@ -31,8 +30,8 @@ export const DropDownMenu = () => {
     >
       <img
         src="/user_icon.png"
-        width="33" 
-        height="33"
+        width="40" 
+        height="40"
         alt="Avatar"
         className="overflow-hidden rounded-full"
       />

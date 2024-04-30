@@ -21,14 +21,10 @@ def scrape_events(data: dict):
     Returns:
         None
     """
-    # URLの作成
     url = f'https://www.walkerplus.com/event_list/{data["search_date"]}/{data["region_id"]}/'
     html = fetch_html(url)
-    # イベント情報の抽出
     events_dict = extract_event_info(html)
-    # イベントの詳細情報を取得
     fetch_event_details(events_dict)
-    # クライアントにJSON形式でイベント情報を返す
     logger.debug(f'Events: {events_dict}')
     return events_dict
 
@@ -75,10 +71,8 @@ def parse_event_item(item: BeautifulSoup) -> dict:
     Returns:
         dict: イベントの詳細情報
     """
-    # イベントのリンクと画像のURLを抽出
     txt_tag = item.find('a', class_='m-mainlist-item__txt')
     event_link = txt_tag.get('href') if txt_tag else None
-    # イベントの画像のURLを抽出
     img_tag = item.find('a', class_='m-mainlist-item__img').find('img')
     img_src = img_tag.get('src') if img_tag else None
     return {
@@ -100,8 +94,10 @@ def fetch_event_details(events_dict: dict):
     for uid, event in events_dict.items():
         if event['map_link']:
             html = fetch_html(event['map_link'])
+            # イベントの詳細情報を取得
             if html:
                 parse_event_details(html, event)
+        # 価格情報を取得
         if event['price_link']:
             html = fetch_html(event['price_link'])
             if html:
@@ -126,13 +122,10 @@ def parse_event_details(html: bytes, event: dict):
             td = row.find('td', class_='m-infotable__td')
             if th and td:
                 key = th.get_text(strip=True)
-                # <a>タグを探す
                 a_tag = td.find('a')
                 if a_tag and a_tag.has_attr('href'):
-                    # <a>タグが存在し、href属性がある場合、リンクをvalueに設定
                     value = a_tag['href']
                 else:
-                    # <a>タグがない場合、またはhref属性がない場合、テキストをvalueに設定
                     value = ' '.join(td.stripped_strings)
                 event[key] = value
     else:

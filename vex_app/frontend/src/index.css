@@ -69,6 +69,8 @@
 @layer base {
   * {
     @apply border-border;
+    scrollbar-color: #869EAF  #fffbfb;
+    scrollbar-width: thin;
   }
   body {
     @apply bg-background text-foreground;
@@ -82,6 +84,4 @@ body, html {
   width: 100%;
   /* Ensure full viewport height */
   height: 100%;
-  /* Remove default margin and padding */
-  overflow: hidden; /* Prevent scrollbars from affecting the full-screen layout */
 }

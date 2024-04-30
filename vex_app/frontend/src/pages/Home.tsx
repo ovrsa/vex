@@ -28,15 +28,13 @@ export const Home = () => {
       <div style={{  position: 'absolute', right: 0, top: 0, padding: '20px' }}>
         <DropDownMenu />
       </div>
-  
 
-      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'flex-start', height: '40vh', paddingTop: '120px' }}>  
+      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'flex-start', height: '40vh', paddingTop: '110px' }}>  
         <DatePickerForm onFormSubmit={handleFormSubmit} />
       </div>
-  
 
-      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '90vh' }}>  
-        <div style={{ width: '100%', maxWidth: '1000px', margin: '0 auto' }}>
+      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '70vh' }}>  
+        <div style={{ width: '100%', maxWidth: '900px' }}>
           <GoogleMap eventsData={eventsData} />
         </div>
       </div>
