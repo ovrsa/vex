@@ -93,7 +93,7 @@ export const GoogleMap = ({eventsData}: {eventsData: any[]}) => {
         <ResetMapButton />
       </div>
 
-      <div ref={mapRef} style={{ height: "100vh", width: "100%" }}>
+      <div ref={mapRef} style={{ height: "80vh", width: "100%" }}>
         Loading...
       </div>
 
