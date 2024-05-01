@@ -10,8 +10,8 @@ export const HomeIcon = () => {
     return (
         <img
         src="/app_icon.png"
-        width="31"
-        height="31"
+        width="30"
+        height="30"
         alt="Avatar"
         className="overflow-hidden rounded-full"
         style={{ cursor: 'pointer' }}
