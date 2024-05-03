@@ -29,6 +29,8 @@ import { CalendarIcon } from "@radix-ui/react-icons"
 import { ButtonLoading } from "./ui/reloadIcon"
 
 // components
+import { authState } from '@/state/authState'
+import { useRecoilValue } from 'recoil'
 import { DistrictSelectPopover } from "./DistrictSelectBox"
 
 
@@ -57,6 +59,9 @@ export const DatePickerForm = ({ onFormSubmit }:DatePickerFormProps) => {
    * - `Calendar`: 日付を選択するためのカレンダーUI
    * - `DistrictSelectPopover`: 地区を選択するためのポップオーバー
    */
+  const auth = useRecoilValue(authState)
+  // const {access_token} = auth.isLoginState
+
   const datePickerForm = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
@@ -72,37 +77,40 @@ export const DatePickerForm = ({ onFormSubmit }:DatePickerFormProps) => {
     const formData = datePickerForm.getValues();
 
     try {
+      // フォームデータをサーバーに送信
       const response = await axios.post("http://localhost:5001/", JSON.stringify(formData),{
         headers: {
           "Content-Type": "application/json",
         },
       });
       
-      // supabaseにデータを送信
+    // バックエンドのリクエストが成功したら、Supabaseにデータを登録
+    if (response.status === 200) {
       const { data, error } = await supabase
-      .from('events')
-      .insert([
-        { 
-          selectedDate: formData.selectedDate, 
-          district: formData.district
-        }
-      ]);
-    
+        .from('events')
+        .insert([
+          { 
+            selectedDate: formData.selectedDate, 
+            district: formData.district
+          }
+        ]);
+
       if (error) {
-        console.error('Error inserting data:', error);
-      } else {
+        throw new Error('Error inserting data into Supabase: ' + error.message);
+      }
+
       if (data) {
         onFormSubmit(data);
       }
-      }
-      
-      onFormSubmit(response.data);
-    } catch (error) {
-      console.error(error)
-      alert("Failed to submit the form. Please try again later.")
-    } finally {
-      setIsLoading(false)
-    } 
+    } else {
+      throw new Error('Failed to send data to backend');
+    }
+    onFormSubmit(response.data);
+  } catch (error) {
+    console.error('Submission error:', error);
+  } finally {
+    setIsLoading(false);
+  }
   };
 
   return (
