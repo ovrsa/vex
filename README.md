@@ -19,6 +19,9 @@
 ## 実行環境の構築
 https://github.com/ovrsa/vex/tree/master/vex_app
 
+## Architecture
+![Architecture](public/app_images/240503_vex.png)
+
 ## 使用技術
 ### Infrastructure
 - Docker
