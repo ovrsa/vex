@@ -23,7 +23,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover"
-import { cn } from "@/lib/utils"
+import { cn, supabase } from "@/lib/utils"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { CalendarIcon } from "@radix-ui/react-icons"
 import { ButtonLoading } from "./ui/reloadIcon"
@@ -68,20 +68,40 @@ export const DatePickerForm = ({ onFormSubmit }:DatePickerFormProps) => {
 
   const handleFormSubmit = async(e: React.FormEvent) => {
     e.preventDefault() 
-    setIsLoading(true) // リクエスト送信中
+    setIsLoading(true)
     const formData = datePickerForm.getValues();
+
     try {
       const response = await axios.post("http://localhost:5001/", JSON.stringify(formData),{
         headers: {
           "Content-Type": "application/json",
         },
       });
+      
+      // supabaseにデータを送信
+      const { data, error } = await supabase
+      .from('events')
+      .insert([
+        { 
+          selectedDate: formData.selectedDate, 
+          district: formData.district
+        }
+      ]);
+    
+      if (error) {
+        console.error('Error inserting data:', error);
+      } else {
+      if (data) {
+        onFormSubmit(data);
+      }
+      }
+      
       onFormSubmit(response.data);
     } catch (error) {
       console.error(error)
       alert("Failed to submit the form. Please try again later.")
     } finally {
-      setIsLoading(false) // リクエスト送信完了
+      setIsLoading(false)
     } 
   };
 
