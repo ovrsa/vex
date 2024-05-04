@@ -9,15 +9,19 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      events: {
+      searches: {
         Row: {
-          id: number
+          id: string
+          user_id: string
           selectedDate: Date
           district: string
+          created_at: Date
         }
         Insert: {
+          user_id: string
           selectedDate: Date
           district: string
+          created_at: Date
         }
       }
     }
