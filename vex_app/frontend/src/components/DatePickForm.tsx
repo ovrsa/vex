@@ -60,13 +60,11 @@ export const DatePickerForm = ({ onFormSubmit }:DatePickerFormProps) => {
    * - `DistrictSelectPopover`: 地区を選択するためのポップオーバー
    */
   const auth = useRecoilValue(authState)
-  // const {access_token} = auth.isLoginState
-
   const datePickerForm = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
       selectedDate: new Date(),
-      district: '東京都(港区)',
+      district: '',
     }
   });
   const [isLoading, setIsLoading] = useState(false) 
@@ -75,6 +73,8 @@ export const DatePickerForm = ({ onFormSubmit }:DatePickerFormProps) => {
     e.preventDefault() 
     setIsLoading(true)
     const formData = datePickerForm.getValues();
+    const createdAt = new Date().toISOString();
+    const userId = auth.user?.id;
 
     try {
       // フォームデータをサーバーに送信
@@ -87,11 +87,13 @@ export const DatePickerForm = ({ onFormSubmit }:DatePickerFormProps) => {
     // バックエンドのリクエストが成功したら、Supabaseにデータを登録
     if (response.status === 200) {
       const { data, error } = await supabase
-        .from('events')
+        .from('searches')
         .insert([
           { 
-            selectedDate: formData.selectedDate, 
-            district: formData.district
+            user_id: userId,
+            selectedDate: formData.selectedDate,
+            district: formData.district,
+            created_at: createdAt,
           }
         ]);
 
