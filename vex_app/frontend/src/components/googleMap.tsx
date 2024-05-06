@@ -1,8 +1,10 @@
+import { Progress } from "@/components/ui/progress";
 import { useGoogleMap } from "@/hooks/useGoogleMap";
 import { eventDataState } from "@/state/authState";
 import { useEffect, useRef } from "react";
 import { useRecoilState } from "recoil";
 import { ResetMapButton } from "./ResetMapButton";
+
 
 
 const tokyoTower = {
@@ -34,7 +36,6 @@ export const GoogleMap = ({eventsData}: {eventsData: any[]}) => {
   const [storedEvents, setStoredEvents] = useRecoilState(eventDataState);
   const mapRef = useRef<HTMLDivElement>(null);
   const map = useGoogleMap(import.meta.env.VITE_APP_GOOGLE_MAPS_API_KEY, mapRef, tokyoTower, eventsData);
-  
   useEffect(() => {
     setStoredEvents(eventsData);
     if (map && eventsData.length > 0) {
@@ -94,7 +95,7 @@ export const GoogleMap = ({eventsData}: {eventsData: any[]}) => {
       </div>
 
       <div ref={mapRef} style={{ height: "80vh", width: "100%" }}>
-        Loading...
+        <Progress value={33} />
       </div>
 
     </div>
