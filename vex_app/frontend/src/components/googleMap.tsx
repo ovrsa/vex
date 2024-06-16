@@ -33,7 +33,7 @@ export const GoogleMap = ({eventsData}: {eventsData: any[]}) => {
     /**
      * GoogleMapに表示するイベントデータを管理
      */
-  const [storedEvents, setStoredEvents] = useRecoilState(eventDataState);
+  const [_, setStoredEvents] = useRecoilState(eventDataState);
   const mapRef = useRef<HTMLDivElement>(null);
   const map = useGoogleMap(import.meta.env.VITE_APP_GOOGLE_MAPS_API_KEY, mapRef, tokyoTower, eventsData);
   useEffect(() => {

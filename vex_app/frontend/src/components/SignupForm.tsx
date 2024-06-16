@@ -11,7 +11,7 @@ export const SignupForm = () => {
      * サインアップフォーム
      */
     const {register, handleSubmit, formState:{errors}} = useForm<SignupData>();
-    const {handleGoogleSignup} = useGoogleSignup();
+    const {handleGoogleLogin} = useGoogleSignup();
     const {handleEmailSignup} = useEmailSignup();
 
     const onSubmit = (data: SignupData) => {
@@ -26,7 +26,7 @@ return(
         <div className="space-y-4">
             <button
                 type="button"
-                onClick={handleGoogleSignup} 
+                onClick={handleGoogleLogin} 
                 className="w-full flex justify-center items-center py-2 px-4 border border-gray-300 rounded-lg shadow-sm bg-white text-sm font-medium text-gray-700 hover:bg-gray-50"
             >
             <img src={googleIcon} alt="Google" className="h-4 w-4 mr-3" />
