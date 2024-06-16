@@ -30,7 +30,7 @@ export const useGoogleMap = (
             if (address) {
               geocoder.geocode({ address: address }, (results, status) => {
                 if (status === 'OK' && results && results[0]) {
-                  const marker = new google.maps.Marker({
+                  new google.maps.Marker({
                     map: map,
                     position: results[0].geometry.location,
                     title: event.title,
