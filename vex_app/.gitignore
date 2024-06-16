@@ -12,6 +12,11 @@ node_modules
 dist
 dist-ssr
 *.local
+__pycache__
+*.pyc
+docker-compose.prod.yml
+nginx.conf
+deps_temp_8ef9604f
 
 # Editor directories and files
 .vscode/*

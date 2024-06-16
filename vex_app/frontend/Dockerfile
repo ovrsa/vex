@@ -1,7 +1,10 @@
 FROM node:18
 WORKDIR /app
 COPY package*.json ./
-COPY .env ./
 RUN npm install
 COPY . .
-CMD ["npm", "run", "dev"]
+ENV PATH="./node_modules/.bin:$PATH"
+RUN npm run build
+RUN npm prune --production
+RUN npm install -g serve
+CMD ["serve", "-s", "dist"]
