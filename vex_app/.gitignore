@@ -23,6 +23,8 @@ __pycache__/
 # Docker and Nginx
 docker-compose.prod.yml
 nginx.conf
+
+# Front
 deps_temp_8ef9604f/
 
 # Editor directories and files
