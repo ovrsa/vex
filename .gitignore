@@ -21,14 +21,13 @@ __pycache__/
 *.pyc
 
 # Docker and Nginx
-docker-compose.prod.yml
 nginx.conf
 
 # Front
 deps_temp_8ef9604f/
 
 # Editor directories and files
-.vscode/*
+.vscode
 !.vscode/extensions.json
 .idea
 .DS_Store
