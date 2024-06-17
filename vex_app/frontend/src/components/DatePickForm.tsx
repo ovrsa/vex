@@ -29,8 +29,6 @@ import { CalendarIcon } from "@radix-ui/react-icons"
 import { ButtonLoading } from "./ui/reloadIcon"
 
 // components
-import { authState } from '@/state/authState'
-import { useRecoilValue } from 'recoil'
 import { DistrictSelectPopover } from "./DistrictSelectBox"
 
 
@@ -59,7 +57,6 @@ export const DatePickerForm = ({ onFormSubmit }:DatePickerFormProps) => {
    * - `Calendar`: 日付を選択するためのカレンダーUI
    * - `DistrictSelectPopover`: 地区を選択するためのポップオーバー
    */
-  const auth = useRecoilValue(authState)
   const datePickerForm = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
@@ -74,7 +71,16 @@ export const DatePickerForm = ({ onFormSubmit }:DatePickerFormProps) => {
     setIsLoading(true)
     const formData = datePickerForm.getValues();
     const createdAt = new Date().toISOString();
-    const userId = auth.user?.id;
+    const tokenString = localStorage.getItem('sb-szgebvinvdpdrueicttp-auth-token');
+    if (!tokenString) {
+      console.error('No auth token found in localStorage');
+      setIsLoading(false);
+      return;
+    }
+  
+    const token = JSON.parse(tokenString);
+    const userId = token.user.id;
+
 
     try {
       // フォームデータをサーバーに送信
@@ -84,7 +90,6 @@ export const DatePickerForm = ({ onFormSubmit }:DatePickerFormProps) => {
         },
       });
       
-    // バックエンドのリクエストが成功したら、Supabaseにデータを登録
     if (response.status === 200) {
       const { data, error } = await supabase
         .from('searches')
