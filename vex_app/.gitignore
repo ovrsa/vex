@@ -1,4 +1,6 @@
+# Environment files
 .env
+
 # Logs
 logs
 *.log
@@ -8,15 +10,22 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
+# Node modules and build directories
 node_modules
 dist
 dist-ssr
 *.local
-__pycache__
+
+# Python cache
+__pycache__/
 *.pyc
+
+# Docker and Nginx
 docker-compose.prod.yml
 nginx.conf
-deps_temp_8ef9604f
+
+# Front
+deps_temp_8ef9604f/
 
 # Editor directories and files
 .vscode/*
