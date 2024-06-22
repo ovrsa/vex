@@ -4,7 +4,8 @@ from routes.event_routes import init_app
 
 app = Flask(__name__)
 
-CORS(app)
+# CORS(app, resources={r"/*": {"origins": "http://160.251.212.124"}})
+CORS(app, resources={r"/*": {"origins": "http://localhost:5173"}})
 init_app(app)
 
 if __name__ == '__main__':

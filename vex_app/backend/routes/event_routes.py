@@ -8,7 +8,7 @@ logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
 
 def init_app(app):
-    @app.route('/', methods=['POST'])
+    @app.route('/api', methods=['POST'])
     def scrape():
         logger.debug(f'Received request: {request.args}')
         data = request.json
@@ -16,11 +16,8 @@ def init_app(app):
         if not validate_data(data):
             return jsonify({'error': 'Invalid data'}), 400
         try:
-            # サービス層での処理を呼び出し
             processed_data = process_request_data(data)
-            # scraperでスクレイピング処理を呼び出し
             scrape_data = scrape_events(processed_data)
-            # クライアントにJSON形式でイベント情報を返す
             return jsonify({
                 "data": scrape_data
             })
