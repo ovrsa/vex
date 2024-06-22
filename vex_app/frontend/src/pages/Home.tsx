@@ -33,7 +33,7 @@ export const Home = () => {
         <DatePickerForm onFormSubmit={handleFormSubmit} />
       </div>
 
-      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '70vh' }}>  
+      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '70vh', marginTop: '20px' }}>  
         <div style={{ width: '100%', maxWidth: '900px' }}>
           <GoogleMap eventsData={eventsData} />
         </div>

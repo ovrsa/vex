@@ -52,7 +52,7 @@ export const DatePickerForm = ({ onFormSubmit }:DatePickerFormProps) => {
    *  日付と地区を選択するためのフォーム
    * ユーザーがフォームを送信すると、
    * 選択された日付と地区の情報がサーバーにPOSTリクエストとして送信される
-   * 
+   *
    * - `Button`: フォームの送信ボタン
    * - `Calendar`: 日付を選択するためのカレンダーUI
    * - `DistrictSelectPopover`: 地区を選択するためのポップオーバー
@@ -64,7 +64,7 @@ export const DatePickerForm = ({ onFormSubmit }:DatePickerFormProps) => {
       district: '',
     }
   });
-  const [isLoading, setIsLoading] = useState(false) 
+  const [isLoading, setIsLoading] = useState(false)
 
   const handleFormSubmit = async(e: React.FormEvent) => {
     e.preventDefault() 
@@ -84,17 +84,20 @@ export const DatePickerForm = ({ onFormSubmit }:DatePickerFormProps) => {
 
     try {
       // フォームデータをサーバーに送信
-      const response = await axios.post("http://localhost:5001/", JSON.stringify(formData),{
+      const response = await axios.post("http://localhost:5001/api", JSON.stringify(formData),{
+      //  const response = await axios.post("/api", JSON.stringify(formData), {
         headers: {
           "Content-Type": "application/json",
         },
       });
-      
+      console.log('Response:', response);
+
+    // バックエンドのリクエストが成功したら、Supabaseにデータを登録
     if (response.status === 200) {
       const { data, error } = await supabase
         .from('searches')
         .insert([
-          { 
+          {
             user_id: userId,
             selectedDate: formData.selectedDate,
             district: formData.district,
@@ -122,8 +125,8 @@ export const DatePickerForm = ({ onFormSubmit }:DatePickerFormProps) => {
 
   return (
     <Form {...datePickerForm}>
-      <form onSubmit={handleFormSubmit} 
-      className="space-y-8" 
+      <form onSubmit={handleFormSubmit}
+      className="space-y-8"
       style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
         <FormField
           control={datePickerForm.control}
@@ -173,7 +176,7 @@ export const DatePickerForm = ({ onFormSubmit }:DatePickerFormProps) => {
                   />
                 </PopoverContent>
               </Popover>
-              
+
               <FormDescription>
                 Please select a district and date, then click Submit.
               </FormDescription>
@@ -181,7 +184,7 @@ export const DatePickerForm = ({ onFormSubmit }:DatePickerFormProps) => {
             </FormItem>
           )}
         />
-        
+
         <Button type="submit" className="submit-button" disabled={isLoading}>
           {isLoading ? <ButtonLoading /> : 'Submit'}
         </Button>
