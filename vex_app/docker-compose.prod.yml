@@ -36,23 +36,6 @@ services:
     networks:
       - vex_app_network
 
-  nginx:
-    image: nginx:latest
-    container_name: nginx
-    volumes:
-      - ./nginx/conf/vex_app.conf.temp:/etc/nginx/conf.d/default.conf
-      - /etc/letsencrypt:/etc/letsencrypt
-      - ./frontend/dist:/app/dist
-    ports:
-      - "80:80"
-      - "443:443"
-    depends_on:
-      - frontend
-      - backend
-    restart: always
-    networks:
-      - vex_app_network
-
 networks:
   vex_app_network:
     name: vex_app_network
