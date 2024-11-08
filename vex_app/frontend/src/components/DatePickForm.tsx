@@ -42,12 +42,12 @@ const FormSchema = z.object({
   selectedDate: z.date().refine(date => date instanceof Date, {
     message: "The selected date is not valid.",
   }),
-  district: z.string().min(1,{
+  district: z.string().min(1, {
     message: "The selected district information is not valid.",
   }),
 })
 
-export const DatePickerForm = ({ onFormSubmit }:DatePickerFormProps) => {
+export const DatePickerForm = ({ onFormSubmit }: DatePickerFormProps) => {
   /**
    *  日付と地区を選択するためのフォーム
    * ユーザーがフォームを送信すると、
@@ -66,82 +66,81 @@ export const DatePickerForm = ({ onFormSubmit }:DatePickerFormProps) => {
   });
   const [isLoading, setIsLoading] = useState(false)
 
-  const handleFormSubmit = async(e: React.FormEvent) => {
-    e.preventDefault() 
+  const handleFormSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
     setIsLoading(true)
     const formData = datePickerForm.getValues();
-    const createdAt = new Date().toISOString();
-    const tokenString = localStorage.getItem('sb-szgebvinvdpdrueicttp-auth-token');
+    // const createdAt = new Date().toISOString();
+    const tokenString = localStorage.getItem('sb-fhwhccswlpqiszxspnoc-auth-token');
     if (!tokenString) {
       console.error('No auth token found in localStorage');
       setIsLoading(false);
       return;
     }
-  
-    const token = JSON.parse(tokenString);
-    const userId = token.user.id;
+
+    // const token = JSON.parse(tokenString);
+    // const userId = token.user.id;
 
 
     try {
       // フォームデータをサーバーに送信
-      const response = await axios.post("http://localhost:5001/api", JSON.stringify(formData),{
-      //  const response = await axios.post("/api", JSON.stringify(formData), {
+      const response = await axios.post("http://localhost:5001/api", JSON.stringify(formData), {
+        //  const response = await axios.post("/api", JSON.stringify(formData), {
         headers: {
           "Content-Type": "application/json",
         },
       });
-      console.log('Response:', response);
 
-    // バックエンドのリクエストが成功したら、Supabaseにデータを登録
-    if (response.status === 200) {
-      const { data, error } = await supabase
-        .from('searches')
-        .insert([
-          {
-            user_id: userId,
-            selectedDate: formData.selectedDate,
-            district: formData.district,
-            created_at: createdAt,
-          }
-        ]);
+      // バックエンドのリクエストが成功したら、Supabaseにデータを登録
+      // if (response.status === 200) {
+      //   const { data, error } = await supabase
+      //     .from('searches')
+      //     .insert([
+      //       {
+      //         user_id: userId,
+      //         selectedDate: formData.selectedDate,
+      //         district: formData.district,
+      //         created_at: createdAt,
+      //       }
+      //     ]);
 
-      if (error) {
-        throw new Error('Error inserting data into Supabase: ' + error.message);
-      }
+      //   if (error) {
+      //     throw new Error('Error inserting data into Supabase: ' + error.message);
+      //   }
 
-      if (data) {
-        onFormSubmit(data);
-      }
-    } else {
-      throw new Error('Failed to send data to backend');
+      //   if (data) {
+      //     onFormSubmit(data);
+      //   }
+      // } else {
+      //   throw new Error('Failed to send data to backend');
+      // }
+      onFormSubmit(response.data);
+    } catch (error) {
+      console.error('Submission error:', error);
+    } finally {
+      setIsLoading(false);
     }
-    onFormSubmit(response.data);
-  } catch (error) {
-    console.error('Submission error:', error);
-  } finally {
-    setIsLoading(false);
-  }
   };
 
   return (
     <Form {...datePickerForm}>
       <form onSubmit={handleFormSubmit}
-      className="space-y-8"
-      style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+        className="space-y-8"
+        style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
         <FormField
           control={datePickerForm.control}
           name="selectedDate"
           render={({ field }) => (
             <FormItem className="flex flex-col">
               <Controller
-              name="district"
-              control={datePickerForm.control}
-              render={({ field }) => (
-                <DistrictSelectPopover
-                selectedDistrict={field.value}
-                onChange={field.onChange}
-                />
-              )}
+                name="district"
+                control={datePickerForm.control}
+                render={({ field }) => (
+                  <DistrictSelectPopover
+                    selectedDistrict={field.value}
+                    onChange={field.onChange}
+                  />
+                )}
               />
 
               <Popover>
@@ -157,9 +156,9 @@ export const DatePickerForm = ({ onFormSubmit }:DatePickerFormProps) => {
                     >
                       {field.value ? (
                         format(field.value, "PPP")
-                        ) : (
-                          <span>Pick a date</span>
-                          )}
+                      ) : (
+                        <span>Pick a date</span>
+                      )}
                       <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
                     </Button>
                   </FormControl>
