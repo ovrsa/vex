@@ -91,7 +91,7 @@ export const DatePickerForm = ({ onFormSubmit }: DatePickerFormProps) => {
         },
       });
 
-      // バックエンドのリクエストが成功したら、Supabaseにデータを登録
+      // TODO: 検索履歴保存の必要性があるか検討
       // if (response.status === 200) {
       //   const { data, error } = await supabase
       //     .from('searches')
