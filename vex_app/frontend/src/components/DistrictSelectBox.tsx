@@ -4,7 +4,7 @@
 import React, { useMemo } from "react"
 
 // discripts data
-import { District, districts } from "@/data/districts"
+import { District, districts } from "@/assets/districts"
 
 // ui components
 import { Button } from "@/components/ui/button"
