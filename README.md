@@ -9,12 +9,12 @@
 
 
 ## 使用画面
-| Login | Signup | Home |
+| Login | ~~Signup~~<br>アクセス増につき廃止 | Home |
 | :---: | :---: | :---: |
 | ![Login](public/app_images/Login.png) | ![Signup](public/app_images/Signup.png) | ![Home](public/app_images/Home.png) |
-| Loginを実施 | Signupを実施 | イベント情報の取得 |
-| Google | Google | 地名 |
-| Email | Email | 日付をCalendarから選択 |
+| Loginを実施 | ~~Signupを実施~~ | イベント情報の取得 |
+| Google | ~~Google~~ | 地名 |
+| Email | ~~Email~~ | 日付をCalendarから選択 |
 
 ## 実行環境の構築
 https://github.com/ovrsa/vex/tree/master/vex_app
