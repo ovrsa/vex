@@ -2,7 +2,7 @@ import { DatePickerForm } from "@/components/DatePickForm";
 import { DropDownMenu } from "@/components/DropDownMenu";
 import { GoogleMap } from "@/components/GoogleMap";
 import { HomeIcon } from "@/components/HomeIcon";
-import { eventDataState } from "@/state/authState";
+import { eventDataState } from "@/stores/authState";
 
 import { useRecoilState } from "recoil";
 

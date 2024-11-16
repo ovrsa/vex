@@ -1,6 +1,6 @@
 import { useClearEventData } from '@/hooks/useClearEventData';
 import { supabase } from '@/lib/utils';
-import { authState } from '@/state/authState';
+import { authState } from '@/stores/authState';
 import { useNavigate } from 'react-router-dom';
 import { useSetRecoilState } from 'recoil';
 

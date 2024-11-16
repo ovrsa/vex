@@ -1,5 +1,5 @@
 import { supabase } from '@/lib/utils';
-import { authState } from '@/state/authState';
+import { authState } from '@/stores/authState';
 import { useSetRecoilState } from 'recoil';
 
 

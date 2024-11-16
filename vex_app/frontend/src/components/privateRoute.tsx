@@ -1,4 +1,4 @@
-import { authState } from '@/state/authState';
+import { authState } from '@/stores/authState';
 import { Navigate } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
 

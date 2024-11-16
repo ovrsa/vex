@@ -1,6 +1,6 @@
 import { Progress } from "@/components/ui/progress";
 import { useGoogleMap } from "@/hooks/useGoogleMap";
-import { eventDataState } from "@/state/authState";
+import { eventDataState } from "@/stores/authState";
 import { useEffect, useRef } from "react";
 import { useRecoilState } from "recoil";
 import { ResetMapButton } from "./ResetMapButton";

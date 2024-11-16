@@ -1,4 +1,4 @@
-import { eventDataState } from '@/state/authState';
+import { eventDataState } from '@/stores/authState';
 import { useResetRecoilState } from 'recoil';
 
 export const useClearEventData = () => {
