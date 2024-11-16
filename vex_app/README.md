@@ -17,19 +17,17 @@
    `/vex_app` ディレクトリに移動します。
 
 2. **Dockerコンテナの起動**  
-   以下のコマンドを実行して、Dockerコンテナをビルドおよび起動します。
+   以下のコマンドを実行して、Dockerコンテナをビルドおよび起動する。
 
    ```bash
    docker-compose up --build
    ```
 
 3. **環境変数の設定**  
-   必要なアカウント情報とキーを作成し、`.env` ファイルに追加します。
+   必要なアカウント情報とキーを作成し、`.env` ファイルに追加。
 
    ```env
    VITE_APP_GOOGLE_MAPS_API_KEY = {VITE_APP_GOOGLE_MAPS_API_KEY}
    VITE_SUPABASE_URL = {VITE_SUPABASE_URL}
    VITE_SUPABASE_API_KEY = {VITE_SUPABASE_API_KEY}
    ```
-
-これで、ローカル環境の構築が完了です。
