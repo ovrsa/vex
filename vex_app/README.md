@@ -31,3 +31,21 @@
    VITE_SUPABASE_URL = {VITE_SUPABASE_URL}
    VITE_SUPABASE_API_KEY = {VITE_SUPABASE_API_KEY}
    ```
+
+# テストの実行
+
+1. すべてのテストを実行
+```
+npm run test
+```
+
+2. ウォッチモードでテスト<br>
+変更があるたびにテストを自動で再実行
+```
+npm run test:watch
+```
+
+3. 特定のテストファイルを実行
+```
+npx vitest run {file}.test.tsx
+```
