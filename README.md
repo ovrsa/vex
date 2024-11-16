@@ -1,5 +1,5 @@
 ## 概要 
-地名と日付を入力してボタンを押すと、ローカルイベントの情報がGooglemap上に表示される
+地名と日付を入力してボタンを押すと、ローカルイベントの情報をmap上に描画する
 
 ## 機能紹介
 イベント情報検索機
@@ -9,7 +9,7 @@
 
 
 ## 使用画面
-https://github.com/user-attachments/assets/6f5827dd-e34e-4626-ac45-816bf8a5b24c
+![action](public/app_images/vex.GIF)
 | Login | ~~Signup~~<br>アクセス増につき廃止 | Home |
 | :---: | :---: | :---: |
 | ![Login](public/app_images/Login.png) | ![Signup](public/app_images/Signup.png) | ![Home](public/app_images/Home.png) |
