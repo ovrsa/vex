@@ -30,6 +30,7 @@ https://github.com/ovrsa/vex/tree/master/vex_app
 
 ### Frontend:
 - vite: ^5.1.4
+- vitest": ^2.1.5
 - react: ^18.2.0
 - typescript: ^5.2.2
 - react-router-dom: ^6.3.0
